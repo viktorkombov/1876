@@ -37,61 +37,65 @@
   </aside>
 
   <!-- Layer controls + legend -->
-  <div id="controls" class="controls-panel">
+  <div id="controls" class="controls-panel is-collapsed">
     <button id="controls-toggle" class="controls-toggle" aria-expanded="true" aria-label="Покажи/скрий слоевете">
       <span class="controls-toggle-label">Слоеве</span>
       <svg class="controls-toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="6 9 12 15 18 9"/>
       </svg>
     </button>
-    <div class="controls-body">
-      <label class="layer-toggle">
-        <input type="checkbox" id="toggle-districts" checked />
-        <span class="toggle-swatch toggle-swatch--district"></span>
-        Окръзи
-      </label>
-      <label class="layer-toggle">
-        <input type="checkbox" id="toggle-okrazhen-centers" checked />
-        <span class="toggle-swatch toggle-swatch--okrazhen"></span>
-        Окръжни центрове
-      </label>
-      <label class="layer-toggle">
-        <input type="checkbox" id="toggle-points" checked />
-        <span class="toggle-swatch toggle-swatch--major"></span>
-        Селища
-      </label>
-      <label class="layer-toggle">
-        <input type="checkbox" id="toggle-detachments" checked />
-        <span class="toggle-swatch toggle-swatch--detachment"></span>
-        Чети
-      </label>
-      <label class="layer-toggle">
-        <input type="checkbox" id="toggle-apostolic" checked />
-        <span class="toggle-swatch toggle-swatch--apostolic"></span>
-        Апостолско събрание
-      </label>
-    </div>
-    <div class="controls-legend">
-      <div class="legend-label">Легенда</div>
-      <div class="legend-item">
-        <span class="legend-icon legend-icon--district"></span>
-        Окръзи
-      </div>
-      <div class="legend-item">
-        <span class="legend-icon legend-icon--okrazhen"></span>
-        Окръжни центрове
-      </div>
-      <div class="legend-item">
-        <span class="legend-icon legend-icon--major"></span>
-        Селища
-      </div>
-      <div class="legend-item">
-        <span class="legend-icon legend-icon--detachment"></span>
-        Чети
-      </div>
-      <div class="legend-item">
-        <span class="legend-icon legend-icon--apostolic"></span>
-        Апостолско събрание
+    <div class="controls-collapse">
+      <div class="controls-collapse-inner">
+        <div class="controls-body">
+          <label class="layer-toggle">
+            <input type="checkbox" id="toggle-districts" checked />
+            <span class="toggle-swatch toggle-swatch--district"></span>
+            Окръзи
+          </label>
+          <label class="layer-toggle">
+            <input type="checkbox" id="toggle-okrazhen-centers" checked />
+            <span class="toggle-swatch toggle-swatch--okrazhen"></span>
+            Окръжни центрове
+          </label>
+          <label class="layer-toggle">
+            <input type="checkbox" id="toggle-points" checked />
+            <span class="toggle-swatch toggle-swatch--major"></span>
+            Селища
+          </label>
+          <label class="layer-toggle">
+            <input type="checkbox" id="toggle-detachments" checked />
+            <span class="toggle-swatch toggle-swatch--detachment"></span>
+            Чети
+          </label>
+          <label class="layer-toggle">
+            <input type="checkbox" id="toggle-apostolic" checked />
+            <span class="toggle-swatch toggle-swatch--apostolic"></span>
+            Апостолско събрание
+          </label>
+        </div>
+        <div class="controls-legend">
+          <div class="legend-label">Легенда</div>
+          <div class="legend-item">
+            <span class="legend-icon legend-icon--district"></span>
+            Окръзи
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon legend-icon--okrazhen"></span>
+            Окръжни центрове
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon legend-icon--major"></span>
+            Селища
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon legend-icon--detachment"></span>
+            Чети
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon legend-icon--apostolic"></span>
+            Апостолско събрание
+          </div>
+        </div>
       </div>
     </div>
   </div>
