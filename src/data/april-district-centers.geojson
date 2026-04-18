@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "district-tarnovo",
+        "popup_id": "district-tarnovo",
+        "name": "Търново",
+        "layer_group": "district_centers",
+        "feature_type": "district_center",
+        "style_group": "district-center",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "source_name": "Търново"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.068211005587163,
+          43.11712383447867
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "district-sliven",
+        "popup_id": "district-sliven",
+        "name": "Сливен",
+        "layer_group": "district_centers",
+        "feature_type": "district_center",
+        "style_group": "district-center",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "source_name": "Слиевен"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.29867717903583,
+          42.480302054029906
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "district-vratsa",
+        "popup_id": "district-vratsa",
+        "name": "Враца",
+        "layer_group": "district_centers",
+        "feature_type": "district_center",
+        "style_group": "district-center",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "source_name": "Враца"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.55210089901648,
+          43.05293386977568
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "district-panagyurishte",
+        "popup_id": "district-panagyurishte",
+        "name": "Панагюрище",
+        "layer_group": "district_centers",
+        "feature_type": "district_center",
+        "style_group": "district-center",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "source_name": "Панагюрище"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.200292901101047,
+          42.15536276146443
+        ]
+      }
+    }
+  ]
+}

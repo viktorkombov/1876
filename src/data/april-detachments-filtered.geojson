@@ -1,0 +1,152 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "detachment-razlovtsi-maleshevsko-i-piyanechko",
+        "popup_id": "detachment-razlovtsi-maleshevsko-i-piyanechko",
+        "name": "Разловци, Малешевско и Пиянечко",
+        "layer_group": "detachments",
+        "feature_type": "detachment_point",
+        "style_group": "detachment-point",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Разловци, Малешевско и Пиянечко"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.922973632812504,
+          41.63186741069748
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "detachment-chetata-na-stoil-voyvoda",
+        "popup_id": "detachment-chetata-na-stoil-voyvoda",
+        "name": "Четата на Стоил войвода",
+        "layer_group": "detachments",
+        "feature_type": "detachment_point",
+        "style_group": "detachment-point",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Четата на Стоил войвода"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.136474609375004,
+          42.589488572714245
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "detachment-chetata-na-tsanko-dyustabanov",
+        "popup_id": "detachment-chetata-na-tsanko-dyustabanov",
+        "name": "Четата на Цанко Дюстабанов",
+        "layer_group": "detachments",
+        "feature_type": "detachment_point",
+        "style_group": "detachment-point",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Четата на Цанко Дюстабанов"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.254821777343754,
+          42.86791248391533
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "detachment-chetata-na-hristo-botev",
+        "popup_id": "detachment-chetata-na-hristo-botev",
+        "name": "Четата на Христо Ботев",
+        "layer_group": "detachments",
+        "feature_type": "detachment_point",
+        "style_group": "detachment-point",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Четата на Христо Ботев"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.785400390625004,
+          43.560491112629286
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "detachment-chetata-na-sider-voyvoda",
+        "popup_id": "detachment-chetata-na-sider-voyvoda",
+        "name": "Четата на Сидер Войвода",
+        "layer_group": "detachments",
+        "feature_type": "detachment_point",
+        "style_group": "detachment-point",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Четата на Сидер Войвода"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.296508789062504,
+          43.000629854450025
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "detachment-chetata-na-tanyu-stoyanov",
+        "popup_id": "detachment-chetata-na-tanyu-stoyanov",
+        "name": "Четата на Таню Стоянов",
+        "layer_group": "detachments",
+        "feature_type": "detachment_point",
+        "style_group": "detachment-point",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Четата на Таню Стоянов"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.696777343750004,
+          43.624147145668076
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "detachment-chetata-na-georgi-benkovski",
+        "popup_id": "detachment-chetata-na-georgi-benkovski",
+        "name": "Четата на Георги Бенковски",
+        "layer_group": "detachments",
+        "feature_type": "detachment_point",
+        "style_group": "detachment-point",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Четата на Георги Бенковски"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.925476074218754,
+          42.238685347536496
+        ]
+      }
+    }
+  ]
+}

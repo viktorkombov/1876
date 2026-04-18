@@ -1,0 +1,761 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-gyurgevo",
+        "popup_id": "point-gyurgevo",
+        "name": "Гюргево",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Гюргево"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.962909938069743,
+          43.89339677217064
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-oborishte",
+        "popup_id": "point-oborishte",
+        "name": "Оборище",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Оборище"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.114221657510598,
+          42.53461072676338
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-koprivshtitsa",
+        "popup_id": "point-koprivshtitsa",
+        "name": "Копривщица",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Копривщица"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.360392397727857,
+          42.6357377119911
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-klisura",
+        "popup_id": "point-klisura",
+        "name": "Клисура",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Клисура"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.4481714103727,
+          42.69439761397676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-eledzhik",
+        "popup_id": "point-eledzhik",
+        "name": "Еледжик",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Еледжик"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.94198930666928,
+          42.37979289388691
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-belovo",
+        "popup_id": "point-belovo",
+        "name": "Белово",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Белово"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.019373368559666,
+          42.2111078537863
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-strelcha",
+        "popup_id": "point-strelcha",
+        "name": "Стрелча",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Стрелча"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.32216184077994,
+          42.50532590964515
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-plovdiv",
+        "popup_id": "point-plovdiv",
+        "name": "Пловдив",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Пловдив"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.750594300050373,
+          42.13395026826782
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-karlovo",
+        "popup_id": "point-karlovo",
+        "name": "Карлово",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Карлово"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.808017399934545,
+          42.64136310447062
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-selishtata-okolo-panagyurishte",
+        "popup_id": "point-selishtata-okolo-panagyurishte",
+        "name": "Селищата около Панагюрище",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 9,
+        "max_zoom": 9,
+        "source_name": "Селищата около Панагюрище"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.26605224609375,
+          42.58746644784859
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-perushtitsa",
+        "popup_id": "point-perushtitsa",
+        "name": "Перущица",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Перущица"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.546236550714784,
+          42.055121011867634
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-bratsigovo",
+        "popup_id": "point-bratsigovo",
+        "name": "Брацигово",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Брацигово"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.370911000407112,
+          42.02642486762621
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-batak",
+        "popup_id": "point-batak",
+        "name": "Батак",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Батак"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.22166693692207,
+          41.94205500633079
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-kotel",
+        "popup_id": "point-kotel",
+        "name": "Котел",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Котел"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.446054199335006,
+          42.888237843368586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-zheravna",
+        "popup_id": "point-zheravna",
+        "name": "Жеравна",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Жеравна"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.459196823554148,
+          42.8322277146563
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-yambol",
+        "popup_id": "point-yambol",
+        "name": "Ямбол",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Ямбол"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.508099611346314,
+          42.48005565450737
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-gorna-oryahovitsa",
+        "popup_id": "point-gorna-oryahovitsa",
+        "name": "Горна Оряховица",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Горна Оряховица"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.689967210976565,
+          43.127147440494184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-byala-cherkva",
+        "popup_id": "point-byala-cherkva",
+        "name": "Бяла черква",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Бяла черква"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.311059548988812,
+          43.20342466239508
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-dryanovski-manastir",
+        "popup_id": "point-dryanovski-manastir",
+        "name": "Дряновски манастир",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Дряновски манастир"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.43436395591721,
+          42.95024081555744
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-tryavna",
+        "popup_id": "point-tryavna",
+        "name": "Трявна",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Трявна"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.491456499510974,
+          42.86722755405157
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-gabrovo",
+        "popup_id": "point-gabrovo",
+        "name": "Габрово",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Габрово"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.31986657882863,
+          42.87157910249375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-batoshevo",
+        "popup_id": "point-batoshevo",
+        "name": "Батошево",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Батошево"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.08332198306228,
+          42.908731067228494
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-kravenik",
+        "popup_id": "point-kravenik",
+        "name": "Кръвеник",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Кръвеник"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.01003572191266,
+          42.84611673960104
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-novo-selo",
+        "popup_id": "point-novo-selo",
+        "name": "Ново село",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Ново село"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.916146897386685,
+          42.83997881056324
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-kozloduy",
+        "popup_id": "point-kozloduy",
+        "name": "Козлодуй",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Козлодуй"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.724977009079794,
+          43.777071127623444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-milin-kamak",
+        "popup_id": "point-milin-kamak",
+        "name": "Милин камък",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Милин камък"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.642854710361636,
+          43.3222502136976
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-kamarata",
+        "popup_id": "point-kamarata",
+        "name": "Камарата",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Връх Камара"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.569116945939218,
+          43.1514615810771
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-sofiya",
+        "popup_id": "point-sofiya",
+        "name": "София",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "София"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.335550944099694,
+          42.68967135411662
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-panagyurishte",
+        "popup_id": "point-panagyurishte",
+        "name": "Панагюрище",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Панагюрище",
+        "source_layer": "okrazi-fallback"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.200292901101047,
+          42.15536276146443
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-vratsa",
+        "popup_id": "point-vratsa",
+        "name": "Враца",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Враца",
+        "source_layer": "okrazi-fallback"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.55210089901648,
+          43.05293386977568
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-sliven",
+        "popup_id": "point-sliven",
+        "name": "Сливен",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Слиевен",
+        "source_layer": "okrazi-fallback"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.29867717903583,
+          42.480302054029906
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-tarnovo",
+        "popup_id": "point-tarnovo",
+        "name": "Търново",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Търново",
+        "source_layer": "okrazi-fallback"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.068211005587163,
+          43.11712383447867
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-verigovo",
+        "popup_id": "point-verigovo",
+        "name": "Веригово",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.70965,
+          42.5103
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-staro-novo-selo",
+        "popup_id": "point-staro-novo-selo",
+        "name": "Старо Ново село",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.56527,
+          42.48783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-pazardzhik",
+        "popup_id": "point-pazardzhik",
+        "name": "Пазарджик",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.33357,
+          42.19277
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-karnobat",
+        "popup_id": "point-karnobat",
+        "name": "Карнобат",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.9833,
+          42.65
+        ]
+      }
+    }
+  ]
+}

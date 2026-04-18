@@ -1,0 +1,436 @@
+/* ============================================================
+   APRIL UPRISING 1876 — MAP STYLES
+   Museum / archival exhibit aesthetic
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@600&display=swap");
+
+/* ── Custom properties ───────────────────────────────────── */
+:root {
+  --c-crimson:    #7a1a1a;   /* primary / district center  */
+  --c-red:        #b83232;   /* point-major                */
+  --c-amber:      #c27020;   /* point-medium               */
+  --c-minor:      #8a8a8a;   /* point-minor                */
+  --c-navy:       #1e3a5f;   /* detachment                 */
+
+  --c-bg:         #ece8e1;   /* warm parchment background  */
+  --c-panel:      #ffffff;
+  --c-header:     #1c1616;   /* panel header               */
+  --c-text:       #2a2a2a;
+  --c-text-muted: #6a6060;
+  --c-divider:    #ede8df;
+  --c-scrollbar:  #c4b8a6;
+
+  --sidebar-w:    440px;
+  --gap:          10px;
+  --radius:       6px;
+  --shadow:       0 4px 28px rgba(0, 0, 0, 0.18);
+  --transition:   0.3s ease;
+}
+
+/* ── Reset & base ────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Map ─────────────────────────────────────────────────── */
+#map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.sidebar {
+  position: absolute;
+  top: var(--gap);
+  left: var(--gap);
+  width: var(--sidebar-w);
+  height: calc(100% - 2 * var(--gap));
+  background: var(--c-panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  /* hidden off-screen to the left */
+  transform: translateX(calc(-100% - var(--gap) - 16px));
+  transition: transform var(--transition);
+  overflow: hidden;
+}
+
+.sidebar.is-open {
+  transform: translateX(0);
+}
+
+/* Shift Leaflet's own left controls when sidebar is open */
+body.sidebar-open .leaflet-left {
+  transition: transform var(--transition);
+  transform: translateX(calc(var(--sidebar-w) + var(--gap) + 8px));
+}
+
+body:not(.sidebar-open) .leaflet-left {
+  transition: transform var(--transition);
+  transform: translateX(0);
+}
+
+/* ── Sidebar internals ───────────────────────────────────── */
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  flex-shrink: 0;
+  background: var(--c-header);
+  color: #fff;
+  padding: 16px 52px 16px 20px;
+  position: relative;
+}
+
+.sidebar-title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.35;
+}
+
+.sidebar-close {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.sidebar-close:hover,
+.sidebar-close:focus-visible {
+  background: rgba(255, 255, 255, 0.25);
+  outline: none;
+}
+
+.sidebar-close svg {
+  width: 18px;
+  height: 18px;
+  stroke: #fff;
+  display: block;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 22px;
+  font-size: 0.93rem;
+  line-height: 1.7;
+  color: var(--c-text);
+  scroll-behavior: smooth;
+}
+
+.sidebar-content p {
+  margin-bottom: 0.9em;
+}
+
+.sidebar-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Scrollbar */
+.sidebar-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: var(--c-divider);
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: var(--c-scrollbar);
+  border-radius: 3px;
+}
+
+.sidebar-source {
+  flex-shrink: 0;
+  border-top: 1px solid var(--c-divider);
+  padding: 10px 22px;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--c-text-muted);
+}
+
+/* ── Controls panel ──────────────────────────────────────── */
+.controls-panel {
+  position: absolute;
+  top: var(--gap);
+  right: var(--gap);
+  background: var(--c-panel);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.13);
+  z-index: 900;
+  min-width: 168px;
+  overflow: hidden;
+}
+
+.controls-header {
+  background: var(--c-header);
+  color: #fff;
+  padding: 9px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.controls-body {
+  padding: 11px 14px 10px;
+  border-bottom: 1px solid var(--c-divider);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.layer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.layer-toggle input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  accent-color: var(--c-crimson);
+  cursor: pointer;
+}
+
+/* Coloured swatch beside each toggle label */
+.toggle-swatch {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.toggle-swatch--district {
+  width: 12px;
+  height: 12px;
+  background: var(--c-crimson);
+  box-shadow: 0 0 0 2px rgba(122, 26, 26, 0.3);
+}
+
+.toggle-swatch--major {
+  background: var(--c-red);
+}
+
+.toggle-swatch--detachment {
+  background: var(--c-navy);
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+/* ── Legend ──────────────────────────────────────────────── */
+.controls-legend {
+  padding: 10px 14px 14px;
+}
+
+.legend-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--c-text-muted);
+  margin-bottom: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.81rem;
+  color: var(--c-text);
+  margin-bottom: 5px;
+  line-height: 1.2;
+}
+
+.legend-icon {
+  flex-shrink: 0;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.legend-icon--district {
+  width: 14px;
+  height: 14px;
+  background: var(--c-crimson);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-crimson);
+  border-radius: 50%;
+}
+
+.legend-icon--major {
+  background: var(--c-red);
+  width: 11px;
+  height: 11px;
+}
+
+.legend-icon--medium {
+  background: var(--c-amber);
+  width: 9px;
+  height: 9px;
+}
+
+.legend-icon--detachment {
+  background: var(--c-navy);
+  border-radius: 2px;
+  transform: rotate(45deg);
+  width: 9px;
+  height: 9px;
+}
+
+/* ── Leaflet marker dots (via divIcon) ───────────────────── */
+.marker-dot {
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.marker-dot:hover {
+  transform: scale(1.25);
+}
+
+/* district-center: largest, pulsing only at zoom 7, with Roman numeral */
+.marker-dot.district-center {
+  background: var(--c-crimson);
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 0 rgba(122, 26, 26, 0);
+  position: relative;
+}
+
+body.zoom-7 .marker-dot.district-center {
+  animation: district-pulse 2.4s ease-out infinite;
+}
+
+.district-numeral {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-family: "Lato", sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.marker-dot.settlement {
+  background: var(--c-red);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* detachment: diamond shape via rotation */
+.marker-dot.detachment-point {
+  background: var(--c-navy);
+  border-radius: 3px;
+  transform: rotate(45deg);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+}
+
+.marker-dot.detachment-point:hover {
+  transform: rotate(45deg) scale(1.2);
+}
+
+/* Active / selected marker emphasis */
+.marker-dot.marker-active {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.7), 0 0 0 6px rgba(122, 26, 26, 0.4);
+}
+
+@keyframes district-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(122, 26, 26, 0.55); }
+  65%  { box-shadow: 0 0 0 10px rgba(122, 26, 26, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(122, 26, 26, 0); }
+}
+
+/* ── Leaflet overrides ───────────────────────────────────── */
+
+/* Remove default Leaflet marker blue icon if any slip through */
+.leaflet-div-icon {
+  background: transparent;
+  border: none;
+}
+
+/* ── Mobile — bottom sheet ───────────────────────────────── */
+@media (max-width: 680px) {
+  .sidebar {
+    top: auto;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: 62%;
+    height: auto;
+    border-radius: var(--radius) var(--radius) 0 0;
+    /* hidden below screen */
+    transform: translateY(110%);
+    transition: transform var(--transition);
+  }
+
+  .sidebar.is-open {
+    transform: translateY(0);
+  }
+
+  /* Controls move to bottom-right on mobile */
+  .controls-panel {
+    top: var(--gap);
+    right: var(--gap);
+    min-width: 140px;
+  }
+
+  /* Don't shift Leaflet controls on mobile (sidebar is bottom sheet) */
+  body.sidebar-open .leaflet-left {
+    transform: translateX(0);
+  }
+
+  .sidebar-title {
+    font-size: 1rem;
+  }
+
+  .sidebar-content {
+    font-size: 0.9rem;
+  }
+}
