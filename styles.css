@@ -8,8 +8,10 @@
 /* ── Custom properties ───────────────────────────────────── */
 :root {
   --c-crimson:    #7a1a1a;   /* primary / district center  */
-  --c-red:        #b83232;   /* point-major                */
-  --c-amber:      #c27020;   /* point-medium               */
+  --c-okrazhen:   #8b4513;   /* okrazhen center            */
+  --c-red:        #b83232;   /* settlement                 */
+  --c-amber:      #c27020;   /* apostolic assembly         */
+  --c-apostolic:  #00531c;   /* apostolic assembly marker  */
   --c-minor:      #8a8a8a;   /* point-minor                */
   --c-navy:       #1e3a5f;   /* detachment                 */
 
@@ -195,18 +197,62 @@ body:not(.sidebar-open) .leaflet-left {
   border-radius: var(--radius);
   box-shadow: 0 2px 18px rgba(0, 0, 0, 0.13);
   z-index: 900;
-  min-width: 168px;
+  min-width: 204px;
   overflow: hidden;
 }
 
-.controls-header {
+.controls-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
   background: var(--c-header);
   color: #fff;
+  border: none;
   padding: 9px 14px;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.controls-toggle:hover {
+  background: #2e2020;
+}
+
+.controls-toggle-label {
+  flex: 1;
+  text-align: left;
+}
+
+.controls-toggle-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform 0.25s;
+}
+
+.controls-panel.is-collapsed .controls-toggle-icon {
+  transform: rotate(-90deg);
+}
+
+.controls-panel .controls-body,
+.controls-panel .controls-legend {
+  transition: max-height 0.10s ease, opacity 0.10s ease;
+  max-height: 600px;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.controls-panel.is-collapsed .controls-body,
+.controls-panel.is-collapsed .controls-legend {
+  transition: max-height 0.10s ease, opacity 0.10s ease, padding 0.10s ease, border 0.10s ease;
+  max-height: 0;
+  opacity: 0;
+  padding: 0 14px;
+  border: none
 }
 
 .controls-body {
@@ -249,6 +295,11 @@ body:not(.sidebar-open) .leaflet-left {
   box-shadow: 0 0 0 2px rgba(122, 26, 26, 0.3);
 }
 
+.toggle-swatch--okrazhen {
+  background: var(--c-okrazhen);
+  border: 1.5px solid rgba(139, 69, 19, 0.5);
+}
+
 .toggle-swatch--major {
   background: var(--c-red);
 }
@@ -257,6 +308,10 @@ body:not(.sidebar-open) .leaflet-left {
   background: var(--c-navy);
   border-radius: 2px;
   transform: rotate(45deg);
+}
+
+.toggle-swatch--apostolic {
+  background: var(--c-apostolic);
 }
 
 /* ── Legend ──────────────────────────────────────────────── */
@@ -299,16 +354,19 @@ body:not(.sidebar-open) .leaflet-left {
   border-radius: 50%;
 }
 
+.legend-icon--okrazhen {
+  width: 12px;
+  height: 12px;
+  background: var(--c-okrazhen);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--c-okrazhen);
+  border-radius: 50%;
+}
+
 .legend-icon--major {
   background: var(--c-red);
   width: 11px;
   height: 11px;
-}
-
-.legend-icon--medium {
-  background: var(--c-amber);
-  width: 9px;
-  height: 9px;
 }
 
 .legend-icon--detachment {
@@ -317,6 +375,13 @@ body:not(.sidebar-open) .leaflet-left {
   transform: rotate(45deg);
   width: 9px;
   height: 9px;
+}
+
+.legend-icon--apostolic {
+  background: var(--c-apostolic);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
 }
 
 /* ── Leaflet marker dots (via divIcon) ───────────────────── */
@@ -359,9 +424,21 @@ body.zoom-7 .marker-dot.district-center {
   white-space: nowrap;
 }
 
+.marker-dot.okrazhen-center {
+  background: var(--c-okrazhen);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
 .marker-dot.settlement {
   background: var(--c-red);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.marker-dot.apostolic-assembly {
+  background: var(--c-apostolic);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
 }
 
 /* detachment: diamond shape via rotation */
@@ -374,11 +451,6 @@ body.zoom-7 .marker-dot.district-center {
 
 .marker-dot.detachment-point:hover {
   transform: rotate(45deg) scale(1.2);
-}
-
-/* Active / selected marker emphasis */
-.marker-dot.marker-active {
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.7), 0 0 0 6px rgba(122, 26, 26, 0.4);
 }
 
 @keyframes district-pulse {
@@ -418,7 +490,6 @@ body.zoom-7 .marker-dot.district-center {
   .controls-panel {
     top: var(--gap);
     right: var(--gap);
-    min-width: 140px;
   }
 
   /* Don't shift Leaflet controls on mobile (sidebar is bottom sheet) */

@@ -6,8 +6,6 @@
 (function () {
   'use strict';
 
-  // ── Config ──────────────────────────────────────────────────────────────
-
   var DATA = {
     points:      './src/data/april-points-filtered.geojson',
     detachments: './src/data/april-detachments-filtered.geojson',
@@ -19,30 +17,19 @@
   var INIT_CENTER = [42.72, 25.1];
   var INIT_ZOOM   = 7;
 
-  // Pixel size of the dot for each style_group
   var MARKER_SIZE = {
-    'district-center':  26,
-    'settlement':      14,
-    'detachment-point': 15
+    'district-center':    26,
+    'okrazhen-center':    15,
+    'settlement':         14,
+    'detachment-point':   15,
+    'apostolic-assembly': 15
   };
-
-  // Roman numeral labels for district center markers
-  var DISTRICT_ROMAN = {
-    'Търново':    'I',
-    'Сливен':     'II',
-    'Враца':      'III',
-    'Панагюрище': 'IV'
-  };
-
-  // ── State ────────────────────────────────────────────────────────────────
 
   var map;
   var popupData   = {};
-  var allFeatures = { points: [], detachments: [], districts: [] };
-  var layerGroups = { points: null, detachments: null, districts: null };
-  var layerOn     = { points: true, detachments: true, districts: true };
-
-  // ── Bootstrap ────────────────────────────────────────────────────────────
+  var allFeatures = { points: [], detachments: [], districts: [], apostolic: [], okrazhenCenters: [] };
+  var layerGroups = { points: null, detachments: null, districts: null, apostolic: null, okrazhenCenters: null };
+  var layerOn     = { points: true, detachments: true, districts: true, apostolic: true, okrazhenCenters: true };
 
   document.addEventListener('DOMContentLoaded', function () {
     createMap();
@@ -52,13 +39,11 @@
     });
   });
 
-  // ── createMap ────────────────────────────────────────────────────────────
-
   function createMap() {
     map = L.map('map', {
-      center:           INIT_CENTER,
-      zoom:             INIT_ZOOM,
-      zoomControl:      true,
+      center:             INIT_CENTER,
+      zoom:               INIT_ZOOM,
+      zoomControl:        true,
       attributionControl: true
     });
 
@@ -74,11 +59,8 @@
       document.body.classList.toggle('zoom-7', map.getZoom() === 7);
     });
 
-    // Set initial state
     document.body.classList.toggle('zoom-7', map.getZoom() === 7);
   }
-
-  // ── loadData ─────────────────────────────────────────────────────────────
 
   function loadData() {
     return Promise.all([
@@ -87,34 +69,30 @@
       fetch(DATA.districts).then(function (r) { return r.json(); }),
       fetch(DATA.popup).then(function (r) { return r.json(); })
     ]).then(function (results) {
-      allFeatures.points      = results[0].features;
-      allFeatures.detachments = results[1].features;
-      allFeatures.districts   = results[2].features;
-      popupData               = results[3];
+      var pts = results[0].features;
+      allFeatures.apostolic       = pts.filter(function (f) { return f.properties.layer_group === 'apostolic'; });
+      allFeatures.okrazhenCenters = pts.filter(function (f) { return f.properties.layer_group === 'okrazhen_centers'; });
+      allFeatures.points          = pts.filter(function (f) { return f.properties.layer_group === 'points'; });
+      allFeatures.detachments     = results[1].features;
+      allFeatures.districts       = results[2].features;
+      popupData                   = results[3];
     });
   }
-
-  // ── Visibility ───────────────────────────────────────────────────────────
 
   function isFeatureVisible(feature, zoom) {
     var p = feature.properties;
     return zoom >= p.min_zoom && zoom <= p.max_zoom;
   }
 
-  // ── Marker icon ──────────────────────────────────────────────────────────
-
   function createMarkerIcon(feature) {
-    var sg   = feature.properties.style_group;
-    var size = MARKER_SIZE[sg] || 10;
-    var inner = '';
-
-    if (sg === 'district-center') {
-      var roman = DISTRICT_ROMAN[feature.properties.name] || '';
-      inner = '<span class="district-numeral">' + roman + '</span>';
-    }
+    var sg    = feature.properties.style_group;
+    var size  = MARKER_SIZE[sg] || 10;
+    var inner = feature.properties.numeral
+      ? '<span class="district-numeral">' + feature.properties.numeral + '</span>'
+      : '';
 
     return L.divIcon({
-      className:   '',   // suppress Leaflet's default white box
+      className:   '',
       html:        '<div class="marker-dot ' + sg + '" style="width:' + size + 'px;height:' + size + 'px;">' + inner + '</div>',
       iconSize:    [size, size],
       iconAnchor:  [size / 2, size / 2],
@@ -122,70 +100,41 @@
     });
   }
 
-  // ── Layer builders ───────────────────────────────────────────────────────
-
-  function createPointLayer(features) {
+  function createMarkerLayer(features) {
     var markers = features.map(function (f) {
       var m = L.marker(
         [f.geometry.coordinates[1], f.geometry.coordinates[0]],
         { icon: createMarkerIcon(f), title: f.properties.name }
       );
-      m.on('click', function () { handleFeatureClick(f, m); });
+      m.on('click', function () { handleMarkerClick(f); });
       return m;
     });
     return L.layerGroup(markers);
   }
-
-  function createDetachmentLayer(features) {
-    var markers = features.map(function (f) {
-      var m = L.marker(
-        [f.geometry.coordinates[1], f.geometry.coordinates[0]],
-        { icon: createMarkerIcon(f), title: f.properties.name }
-      );
-      m.on('click', function () { handleFeatureClick(f, m); });
-      return m;
-    });
-    return L.layerGroup(markers);
-  }
-
-  function createDistrictLayer(features) {
-    var markers = features.map(function (f) {
-      var m = L.marker(
-        [f.geometry.coordinates[1], f.geometry.coordinates[0]],
-        { icon: createMarkerIcon(f), title: f.properties.name }
-      );
-      m.on('click', function () { handleDistrictCenterClick(f, m); });
-      return m;
-    });
-    return L.layerGroup(markers);
-  }
-
-  // ── renderVisibleLayers ──────────────────────────────────────────────────
 
   function renderVisibleLayers() {
     var zoom = map.getZoom();
 
-    // Remove old layer groups
-    if (layerGroups.points)      { map.removeLayer(layerGroups.points); }
-    if (layerGroups.detachments) { map.removeLayer(layerGroups.detachments); }
-    if (layerGroups.districts)   { map.removeLayer(layerGroups.districts); }
+    if (layerGroups.points)         { map.removeLayer(layerGroups.points); }
+    if (layerGroups.detachments)    { map.removeLayer(layerGroups.detachments); }
+    if (layerGroups.apostolic)      { map.removeLayer(layerGroups.apostolic); }
+    if (layerGroups.okrazhenCenters){ map.removeLayer(layerGroups.okrazhenCenters); }
+    if (layerGroups.districts)      { map.removeLayer(layerGroups.districts); }
 
-    // Filter by zoom + toggle state
-    var visPoints      = layerOn.points      ? allFeatures.points.filter(function (f) { return isFeatureVisible(f, zoom); })      : [];
-    var visDetachments = layerOn.detachments ? allFeatures.detachments.filter(function (f) { return isFeatureVisible(f, zoom); }) : [];
-    var visDistricts   = layerOn.districts   ? allFeatures.districts.filter(function (f) { return isFeatureVisible(f, zoom); })   : [];
+    var vis = function (key) {
+      return layerOn[key]
+        ? allFeatures[key].filter(function (f) { return isFeatureVisible(f, zoom); })
+        : [];
+    };
 
-    // Build and add — districts on top so they stay clickable at zoom 7
-    layerGroups.points      = createPointLayer(visPoints).addTo(map);
-    layerGroups.detachments = createDetachmentLayer(visDetachments).addTo(map);
-    layerGroups.districts   = createDistrictLayer(visDistricts).addTo(map);
+    layerGroups.points          = createMarkerLayer(vis('points')).addTo(map);
+    layerGroups.detachments     = createMarkerLayer(vis('detachments')).addTo(map);
+    layerGroups.apostolic       = createMarkerLayer(vis('apostolic')).addTo(map);
+    layerGroups.okrazhenCenters = createMarkerLayer(vis('okrazhenCenters')).addTo(map);
+    layerGroups.districts       = createMarkerLayer(vis('districts')).addTo(map);
   }
 
-  // ── Info panel ───────────────────────────────────────────────────────────
-
   function openInfoPanel(feature, popupEntry) {
-    var sidebar = document.getElementById('sidebar');
-
     document.getElementById('sidebar-title').textContent =
       (popupEntry && popupEntry.title) ? popupEntry.title : feature.properties.name;
 
@@ -195,10 +144,8 @@
     document.getElementById('sidebar-source').textContent =
       (popupEntry && popupEntry.source_title) ? popupEntry.source_title : '';
 
-    // Reset scroll position
     document.getElementById('sidebar-content').scrollTop = 0;
-
-    sidebar.classList.add('is-open');
+    document.getElementById('sidebar').classList.add('is-open');
     document.body.classList.add('sidebar-open');
   }
 
@@ -207,28 +154,7 @@
     document.body.classList.remove('sidebar-open');
   }
 
-  // ── Click handlers ────────────────────────────────────────────────────────
-
-  function handleFeatureClick(feature, marker) {
-    var entry = popupData[feature.properties.popup_id];
-    if (!entry) { return; }
-
-    openInfoPanel(feature, entry);
-
-    var latlng = L.latLng(
-      feature.geometry.coordinates[1],
-      feature.geometry.coordinates[0]
-    );
-    map.panTo(latlng);
-  }
-
-  // ── handleDistrictCenterClick ────────────────────────────────────────────
-  // Special behaviour:
-  //   • always open the info panel immediately
-  //   • if at zoom 7, smoothly fly to zoom 8 — panel stays open
-  //   • if already at zoom ≥ 8, just pan
-
-  function handleDistrictCenterClick(feature, marker) {
+  function handleMarkerClick(feature) {
     var entry = popupData[feature.properties.popup_id];
     if (!entry) { return; }
 
@@ -239,18 +165,41 @@
       feature.geometry.coordinates[0]
     );
 
-    if (map.getZoom() <= 7) {
+    if (feature.properties.feature_type === 'district_center' && map.getZoom() <= 7) {
       map.flyTo(latlng, 8, { duration: 1.2, easeLinearity: 0.35 });
     } else {
       map.panTo(latlng);
     }
   }
 
-  // ── Controls binding ──────────────────────────────────────────────────────
-
   function bindControls() {
     document.getElementById('sidebar-close')
       .addEventListener('click', closeInfoPanel);
+
+    document.getElementById('controls-toggle')
+      .addEventListener('click', function () {
+        var panel = document.getElementById('controls');
+        var collapsed = panel.classList.toggle('is-collapsed');
+        this.setAttribute('aria-expanded', String(!collapsed));
+      });
+
+    document.getElementById('toggle-districts')
+      .addEventListener('change', function (e) {
+        layerOn.districts = e.target.checked;
+        renderVisibleLayers();
+      });
+
+    document.getElementById('toggle-okrazhen-centers')
+      .addEventListener('change', function (e) {
+        layerOn.okrazhenCenters = e.target.checked;
+        renderVisibleLayers();
+      });
+
+    document.getElementById('toggle-apostolic')
+      .addEventListener('change', function (e) {
+        layerOn.apostolic = e.target.checked;
+        renderVisibleLayers();
+      });
 
     document.getElementById('toggle-points')
       .addEventListener('change', function (e) {
@@ -261,12 +210,6 @@
     document.getElementById('toggle-detachments')
       .addEventListener('change', function (e) {
         layerOn.detachments = e.target.checked;
-        renderVisibleLayers();
-      });
-
-    document.getElementById('toggle-districts')
-      .addEventListener('change', function (e) {
-        layerOn.districts = e.target.checked;
         renderVisibleLayers();
       });
   }

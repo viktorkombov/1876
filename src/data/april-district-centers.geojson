@@ -7,6 +7,7 @@
         "id": "district-tarnovo",
         "popup_id": "district-tarnovo",
         "name": "Търново",
+        "numeral": "I",
         "layer_group": "district_centers",
         "feature_type": "district_center",
         "style_group": "district-center",
@@ -28,12 +29,13 @@
         "id": "district-sliven",
         "popup_id": "district-sliven",
         "name": "Сливен",
+        "numeral": "II",
         "layer_group": "district_centers",
         "feature_type": "district_center",
         "style_group": "district-center",
         "min_zoom": 7,
         "max_zoom": 9,
-        "source_name": "Слиевен"
+        "source_name": "Сливен"
       },
       "geometry": {
         "type": "Point",
@@ -49,6 +51,7 @@
         "id": "district-vratsa",
         "popup_id": "district-vratsa",
         "name": "Враца",
+        "numeral": "III",
         "layer_group": "district_centers",
         "feature_type": "district_center",
         "style_group": "district-center",
@@ -70,6 +73,7 @@
         "id": "district-panagyurishte",
         "popup_id": "district-panagyurishte",
         "name": "Панагюрище",
+        "numeral": "IV",
         "layer_group": "district_centers",
         "feature_type": "district_center",
         "style_group": "district-center",

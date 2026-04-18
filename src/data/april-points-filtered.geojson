@@ -7,10 +7,10 @@
         "id": "point-gyurgevo",
         "popup_id": "point-gyurgevo",
         "name": "Гюргево",
-        "layer_group": "points",
-        "feature_type": "point",
-        "style_group": "settlement",
-        "min_zoom": 8,
+        "layer_group": "apostolic",
+        "feature_type": "apostolic_assembly",
+        "style_group": "apostolic-assembly",
+        "min_zoom": 7,
         "max_zoom": 9,
         "source_name": "Гюргево"
       },
@@ -340,27 +340,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "point-gorna-oryahovitsa",
-        "popup_id": "point-gorna-oryahovitsa",
-        "name": "Горна Оряховица",
-        "layer_group": "points",
-        "feature_type": "point",
-        "style_group": "settlement",
-        "min_zoom": 8,
-        "max_zoom": 9,
-        "source_name": "Горна Оряховица"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          25.689967210976565,
-          43.127147440494184
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "point-byala-cherkva",
         "popup_id": "point-byala-cherkva",
         "name": "Бяла черква",
@@ -592,94 +571,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "point-panagyurishte",
-        "popup_id": "point-panagyurishte",
-        "name": "Панагюрище",
-        "layer_group": "points",
-        "feature_type": "point",
-        "style_group": "settlement",
-        "min_zoom": 8,
-        "max_zoom": 9,
-        "source_name": "Панагюрище",
-        "source_layer": "okrazi-fallback"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          24.186796134849448, 
-          42.503420730722112
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "point-vratsa",
-        "popup_id": "point-vratsa",
-        "name": "Враца",
-        "layer_group": "points",
-        "feature_type": "point",
-        "style_group": "settlement",
-        "min_zoom": 8,
-        "max_zoom": 9,
-        "source_name": "Враца",
-        "source_layer": "okrazi-fallback"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          23.5541474814327, 
-          43.211695507173808
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "point-sliven",
-        "popup_id": "point-sliven",
-        "name": "Сливен",
-        "layer_group": "points",
-        "feature_type": "point",
-        "style_group": "settlement",
-        "min_zoom": 8,
-        "max_zoom": 9,
-        "source_name": "Слиевен",
-        "source_layer": "okrazi-fallback"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          26.317378738956904,
-          42.681476856353925
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "point-tarnovo",
-        "popup_id": "point-tarnovo",
-        "name": "Търново",
-        "layer_group": "points",
-        "feature_type": "point",
-        "style_group": "settlement",
-        "min_zoom": 8,
-        "max_zoom": 9,
-        "source_name": "Търново",
-        "source_layer": "okrazi-fallback"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          25.628927669637815, 
-          43.07987347534155
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "point-verigovo",
         "popup_id": "point-verigovo",
         "name": "Веригово",
@@ -687,7 +578,8 @@
         "feature_type": "point",
         "style_group": "settlement",
         "min_zoom": 8,
-        "max_zoom": 9
+        "max_zoom": 9,
+        "source_name": "Веригово"
       },
       "geometry": {
         "type": "Point",
@@ -707,7 +599,8 @@
         "feature_type": "point",
         "style_group": "settlement",
         "min_zoom": 8,
-        "max_zoom": 9
+        "max_zoom": 9,
+        "source_name": "Старо Ново село"
       },
       "geometry": {
         "type": "Point",
@@ -727,7 +620,8 @@
         "feature_type": "point",
         "style_group": "settlement",
         "min_zoom": 8,
-        "max_zoom": 9
+        "max_zoom": 9,
+        "source_name": "Пазарджик"
       },
       "geometry": {
         "type": "Point",
@@ -747,13 +641,119 @@
         "feature_type": "point",
         "style_group": "settlement",
         "min_zoom": 8,
-        "max_zoom": 9
+        "max_zoom": 9,
+        "source_name": "Карнобат"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
           24.694011474957321,
           42.518761028415938
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "okrazhen-center-gorna-oryahovitsa",
+        "popup_id": "point-gorna-oryahovitsa",
+        "name": "Горна Оряховица",
+        "layer_group": "okrazhen_centers",
+        "feature_type": "okrazhen_center",
+        "style_group": "okrazhen-center",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Горна Оряховица"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.689967210976565,
+          43.127147440494184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "okrazhen-center-panagyurishte",
+        "popup_id": "point-panagyurishte",
+        "name": "Панагюрище",
+        "layer_group": "okrazhen_centers",
+        "feature_type": "okrazhen_center",
+        "style_group": "okrazhen-center",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Панагюрище"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.186796134849448,
+          42.503420730722112
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "okrazhen-center-vratsa",
+        "popup_id": "point-vratsa",
+        "name": "Враца",
+        "layer_group": "okrazhen_centers",
+        "feature_type": "okrazhen_center",
+        "style_group": "okrazhen-center",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Враца"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.5541474814327,
+          43.211695507173808
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "okrazhen-center-sliven",
+        "popup_id": "point-sliven",
+        "name": "Сливен",
+        "layer_group": "okrazhen_centers",
+        "feature_type": "okrazhen_center",
+        "style_group": "okrazhen-center",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Сливен"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.317378738956904,
+          42.681476856353925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "okrazhen-center-tarnovo",
+        "popup_id": "point-tarnovo",
+        "name": "Търново",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 8,
+        "max_zoom": 9,
+        "source_name": "Търново"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.628927669637815,
+          43.07987347534155
         ]
       }
     }
