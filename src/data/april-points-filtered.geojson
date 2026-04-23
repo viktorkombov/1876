@@ -766,7 +766,7 @@
         "layer_group": "points",
         "feature_type": "point",
         "style_group": "settlement",
-        "min_zoom": 9,
+        "min_zoom": 8,
         "max_zoom": 9,
         "source_name": "Калугерово"
       },
