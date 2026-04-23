@@ -571,15 +571,15 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "point-verigovo",
-        "popup_id": "point-verigovo",
-        "name": "Веригово",
+        "id": "point-sindzhirlii",
+        "popup_id": "point-sindzhirlii",
+        "name": "Синджирлий",
         "layer_group": "points",
         "feature_type": "point",
         "style_group": "settlement",
         "min_zoom": 8,
         "max_zoom": 9,
-        "source_name": "Веригово"
+        "source_name": "Синджирлий"
       },
       "geometry": {
         "type": "Point",
@@ -626,29 +626,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          24.337598178914028, 
+          24.337598178914028,
           42.192090591710723
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "point-karnobat",
-        "popup_id": "point-karnobat",
-        "name": "Карнобат",
-        "layer_group": "points",
-        "feature_type": "point",
-        "style_group": "settlement",
-        "min_zoom": 8,
-        "max_zoom": 9,
-        "source_name": "Карнобат"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          26.980267442363402,
-          42.651150350969765
         ]
       }
     },
@@ -754,6 +733,48 @@
         "coordinates": [
           25.628927669637815,
           43.07987347534155
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-kostina",
+        "popup_id": "point-kostina",
+        "name": "Костина",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 9,
+        "max_zoom": 9,
+        "source_name": "Костина"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.331137634657235,
+          42.825421489643112
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "point-kalugerovo",
+        "popup_id": "point-kalugerovo",
+        "name": "Калугерово",
+        "layer_group": "points",
+        "feature_type": "point",
+        "style_group": "settlement",
+        "min_zoom": 9,
+        "max_zoom": 9,
+        "source_name": "Калугерово"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.165465781187631,
+          42.325712418422299
         ]
       }
     }
