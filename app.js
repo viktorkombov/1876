@@ -7,10 +7,15 @@
   'use strict';
 
   var DATA = {
-    points:      './src/data/april-points-filtered.geojson',
-    detachments: './src/data/april-detachments-filtered.geojson',
-    districts:   './src/data/april-district-centers.geojson',
-    popup:       './src/data/april-popup-content.json'
+    points:       './src/data/april-points-filtered.geojson',
+    detachments:  './src/data/april-detachments-filtered.geojson',
+    districts:    './src/data/april-district-centers.geojson',
+    popup:        './src/data/april-popup-content.json',
+    botevRoute:       './src/data/botev-route.geojson',
+    botevPoints:      './src/data/botev-timeline-points.geojson',
+    botevContent:     './src/data/botev-timeline-content.json',
+    chetnitsiPlaces:  './src/data/botev-chetnitsi-places.geojson',
+    chetnitsiContent: './src/data/botev-chetnitsi-content.json'
   };
 
   var TILE_URL    = './src/tiles/{z}/{x}/{y}.png';
@@ -27,15 +32,38 @@
 
   var map;
   var popupData   = {};
-  var allFeatures = { points: [], detachments: [], districts: [], apostolic: [], okrazhenCenters: [] };
-  var layerGroups = { points: null, detachments: null, districts: null, apostolic: null, okrazhenCenters: null };
-  var layerOn     = { points: true, detachments: true, districts: true, apostolic: true, okrazhenCenters: true };
+  var allFeatures = { points: [], detachments: [], districts: [], apostolic: [], okrazhenCenters: [], chetnitsi: [] };
+  var layerGroups = { points: null, detachments: null, districts: null, apostolic: null, okrazhenCenters: null, chetnitsi: null };
+  var layerOn     = { points: true, detachments: true, districts: true, apostolic: true, okrazhenCenters: true, botev: true, chetnitsi: true };
+
+  var chetnitsiContent = {};
+
+  /* Botev timeline state */
+  var botev = {
+    routeCoords:   [],     /* flattened [[lat,lng], ...]  */
+    points:        [],     /* sorted timeline features    */
+    content:       {},
+    routeLayer:    null,   /* faint full route            */
+    activeLayer:   null,   /* highlighted progress        */
+    pointsLayer:   null,
+    pointMarkers:  [],
+    currentIndex:  -1,
+    playing:       false,
+    playTimer:     null,
+    playInterval:  2500
+  };
 
   document.addEventListener('DOMContentLoaded', function () {
     createMap();
     loadData().then(function () {
       renderVisibleLayers();
-      bindControls();
+      return loadBotevTimelineData();
+    }).then(function () {
+      createBotevRouteLayer();
+      createTimelinePointLayer();
+      if (layerOn.botev) { showBotevLayers(); }
+      initTimelineControl();
+      return loadChetnitsiData();
     });
   });
 
@@ -120,6 +148,7 @@
     if (layerGroups.apostolic)      { map.removeLayer(layerGroups.apostolic); }
     if (layerGroups.okrazhenCenters){ map.removeLayer(layerGroups.okrazhenCenters); }
     if (layerGroups.districts)      { map.removeLayer(layerGroups.districts); }
+    if (layerGroups.chetnitsi)      { map.removeLayer(layerGroups.chetnitsi); }
 
     var vis = function (key) {
       return layerOn[key]
@@ -132,6 +161,7 @@
     layerGroups.apostolic       = createMarkerLayer(vis('apostolic')).addTo(map);
     layerGroups.okrazhenCenters = createMarkerLayer(vis('okrazhenCenters')).addTo(map);
     layerGroups.districts       = createMarkerLayer(vis('districts')).addTo(map);
+    layerGroups.chetnitsi       = createChetnitsiLayer(vis('chetnitsi')).addTo(map);
   }
 
   function openInfoPanel(feature, popupEntry) {
@@ -212,6 +242,360 @@
         layerOn.detachments = e.target.checked;
         renderVisibleLayers();
       });
+
+    var botevToggle = document.getElementById('toggle-botev');
+    if (botevToggle) {
+      botevToggle.addEventListener('change', function (e) {
+        setBotevVisible(e.target.checked);
+      });
+    }
+
+    var chetToggle = document.getElementById('toggle-chetnitsi');
+    if (chetToggle) {
+      chetToggle.addEventListener('change', function (e) {
+        layerOn.chetnitsi = e.target.checked;
+        renderVisibleLayers();
+      });
+    }
+  }
+
+  /* ============================================================
+     Botev chetnitsi origins
+     ============================================================ */
+
+  function loadChetnitsiData() {
+    return Promise.all([
+      fetch(DATA.chetnitsiPlaces).then(function (r) { return r.json(); }),
+      fetch(DATA.chetnitsiContent).then(function (r) { return r.json(); })
+    ]).then(function (results) {
+      allFeatures.chetnitsi = (results[0].features || []).slice();
+      chetnitsiContent      = results[1] || {};
+    }).catch(function (err) {
+      console.warn('Chetnitsi data failed to load', err);
+    });
+  }
+
+  function createChetnitsiLayer(features) {
+    var markers = features.map(function (f) {
+      var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
+      return renderChetnitsiMarker(f, ll);
+    });
+    return L.layerGroup(markers);
+  }
+
+  function renderChetnitsiMarker(feature, latlng) {
+    var count = feature.properties.count || 0;
+    var size  = count >= 10 ? 36 : (count >= 5 ? 32 : 28);
+    var icon  = L.divIcon({
+      className:   '',
+      html:        '<div class="chetnitsi-marker" style="width:' + size + 'px;height:' + size + 'px;"><span class="chetnitsi-marker-count">' + count + '</span></div>',
+      iconSize:    [size, size],
+      iconAnchor:  [size / 2, size / 2],
+      popupAnchor: [0, -(size / 2 + 4)]
+    });
+    var m = L.marker(latlng, { icon: icon, title: feature.properties.name });
+    m.on('click', function () { openChetnitsiPanel(feature); });
+    return m;
+  }
+
+  function openChetnitsiPanel(feature) {
+    var entry = chetnitsiContent[feature.properties.popup_id];
+    if (!entry) {
+      entry = { title: feature.properties.name, summary: '', count: feature.properties.count || 0, members: [] };
+    }
+
+    document.getElementById('sidebar-title').textContent = entry.title || feature.properties.name;
+    document.getElementById('sidebar-content').innerHTML = renderChetnitsiContent(entry);
+    document.getElementById('sidebar-source').textContent = entry.source_title || '';
+    document.getElementById('sidebar-content').scrollTop = 0;
+    document.getElementById('sidebar').classList.add('is-open');
+    document.body.classList.add('sidebar-open');
+
+    map.panTo(L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]));
+  }
+
+  function renderChetnitsiContent(entry) {
+    var members = Array.isArray(entry.members) ? entry.members : [];
+    var count   = (typeof entry.count === 'number') ? entry.count : members.length;
+
+    var html = '<div class="chetnitsi-content">';
+    if (entry.summary) {
+      html += '<p class="chetnitsi-summary">' + escapeHtml(entry.summary) + '</p>';
+    }
+    html += '<p class="chetnitsi-count">Общо: <strong>' + count + '</strong> четници</p>';
+
+    if (members.length) {
+      html += '<ul class="chetnitsi-members">';
+      members.forEach(function (m) {
+        html += '<li class="chetnitsi-member-card">';
+        html += '<div class="chetnitsi-member-head">';
+        html += '<span class="chetnitsi-member-name">' + escapeHtml(m.name || '') + '</span>';
+        if (m.years) {
+          html += '<span class="chetnitsi-member-years">' + escapeHtml(m.years) + '</span>';
+        }
+        html += '</div>';
+        if (m.role) {
+          html += '<div class="chetnitsi-member-role">' + escapeHtml(m.role) + '</div>';
+        }
+        if (m.info) {
+          html += '<div class="chetnitsi-member-info">' + escapeHtml(m.info) + '</div>';
+        }
+        html += '</li>';
+      });
+      html += '</ul>';
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /* ============================================================
+     Botev timeline
+     ============================================================ */
+
+  function loadBotevTimelineData() {
+    return Promise.all([
+      fetch(DATA.botevRoute).then(function (r) { return r.json(); }),
+      fetch(DATA.botevPoints).then(function (r) { return r.json(); }),
+      fetch(DATA.botevContent).then(function (r) { return r.json(); })
+    ]).then(function (results) {
+      botev.routeCoords = flattenRouteCoords(results[0]);
+      botev.points = (results[1].features || []).slice().sort(function (a, b) {
+        return (a.properties.order || 0) - (b.properties.order || 0);
+      });
+      botev.content = results[2] || {};
+
+      botev.points.forEach(function (f) {
+        var lng = f.geometry.coordinates[0];
+        var lat = f.geometry.coordinates[1];
+        f.__routeIndex = nearestRouteVertexIndex(lat, lng);
+      });
+    }).catch(function (err) {
+      // fail soft; existing map keeps working
+      console.warn('Botev timeline data failed to load', err);
+    });
+  }
+
+  function flattenRouteCoords(geojson) {
+    var out = [];
+    var features = (geojson && geojson.features) || [];
+    features.forEach(function (f) {
+      var g = f.geometry;
+      if (!g) { return; }
+      if (g.type === 'LineString') {
+        g.coordinates.forEach(function (c) { out.push([c[1], c[0]]); });
+      } else if (g.type === 'MultiLineString') {
+        g.coordinates.forEach(function (line) {
+          line.forEach(function (c) { out.push([c[1], c[0]]); });
+        });
+      }
+    });
+    return out;
+  }
+
+  function nearestRouteVertexIndex(lat, lng) {
+    if (!botev.routeCoords.length) { return 0; }
+    var best = 0;
+    var bestD = Infinity;
+    var cosLat = Math.cos(lat * Math.PI / 180);
+    for (var i = 0; i < botev.routeCoords.length; i++) {
+      var dy = botev.routeCoords[i][0] - lat;
+      var dx = (botev.routeCoords[i][1] - lng) * cosLat;
+      var d  = dx * dx + dy * dy;
+      if (d < bestD) { bestD = d; best = i; }
+    }
+    return best;
+  }
+
+  function createBotevRouteLayer() {
+    if (!botev.routeCoords.length) { return; }
+    botev.routeLayer = L.polyline(botev.routeCoords, {
+      color:       '#6e2c91',
+      weight:      3,
+      opacity:     0.4,
+      dashArray:   '6 6',
+      interactive: false,
+      className:   'botev-route-bg'
+    });
+    botev.activeLayer = L.polyline([], {
+      color:       '#6e2c91',
+      weight:      5,
+      opacity:     0.95,
+      lineCap:     'round',
+      lineJoin:    'round',
+      interactive: false,
+      className:   'botev-route-active'
+    });
+  }
+
+  function createTimelinePointLayer() {
+    var size = 18;
+    var markers = botev.points.map(function (f, idx) {
+      var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
+      var icon = L.divIcon({
+        className:   '',
+        html:        '<div class="marker-dot timeline-point" data-idx="' + idx + '" style="width:' + size + 'px;height:' + size + 'px;"><span class="timeline-numeral">' + (f.properties.order || (idx + 1)) + '</span></div>',
+        iconSize:    [size, size],
+        iconAnchor:  [size / 2, size / 2],
+        popupAnchor: [0, -(size / 2 + 4)]
+      });
+      var m = L.marker(ll, { icon: icon, title: f.properties.name });
+      m.on('click', function () { goToTimelineStep(idx); });
+      return m;
+    });
+    botev.pointMarkers = markers;
+    botev.pointsLayer  = L.layerGroup(markers);
+  }
+
+  function showBotevLayers() {
+    if (botev.routeLayer  && !map.hasLayer(botev.routeLayer))  { botev.routeLayer.addTo(map); }
+    if (botev.activeLayer && !map.hasLayer(botev.activeLayer)) { botev.activeLayer.addTo(map); }
+    if (botev.pointsLayer && !map.hasLayer(botev.pointsLayer)) { botev.pointsLayer.addTo(map); }
+  }
+
+  function hideBotevLayers() {
+    if (botev.routeLayer  && map.hasLayer(botev.routeLayer))  { map.removeLayer(botev.routeLayer); }
+    if (botev.activeLayer && map.hasLayer(botev.activeLayer)) { map.removeLayer(botev.activeLayer); }
+    if (botev.pointsLayer && map.hasLayer(botev.pointsLayer)) { map.removeLayer(botev.pointsLayer); }
+  }
+
+  function setBotevVisible(on) {
+    layerOn.botev = !!on;
+    var panel = document.getElementById('timeline');
+    if (on) {
+      showBotevLayers();
+      if (panel) { panel.hidden = false; }
+      // re-apply active class after markers re-attach
+      setTimeout(updateTimelineUI, 0);
+    } else {
+      pauseTimeline();
+      hideBotevLayers();
+      if (panel) { panel.hidden = true; }
+    }
+  }
+
+  function initTimelineControl() {
+    var panel = document.getElementById('timeline');
+    if (!panel || !botev.points.length) { return; }
+    panel.hidden = !layerOn.botev;
+
+    var slider = document.getElementById('timeline-slider');
+    if (slider) {
+      slider.min   = '0';
+      slider.max   = String(Math.max(0, botev.points.length - 1));
+      slider.value = '0';
+      slider.addEventListener('input', function (e) {
+        var i = parseInt(e.target.value, 10) || 0;
+        goToTimelineStep(i);
+      });
+    }
+
+    var prev = document.getElementById('timeline-prev');
+    if (prev) {
+      prev.addEventListener('click', function () {
+        var i = (botev.currentIndex < 0 ? 0 : botev.currentIndex - 1);
+        if (i < 0) { i = 0; }
+        goToTimelineStep(i);
+      });
+    }
+
+    var next = document.getElementById('timeline-next');
+    if (next) {
+      next.addEventListener('click', function () {
+        var i = (botev.currentIndex < 0 ? 0 : botev.currentIndex + 1);
+        if (i >= botev.points.length) { i = botev.points.length - 1; }
+        goToTimelineStep(i);
+      });
+    }
+
+    var play = document.getElementById('timeline-play');
+    if (play) {
+      play.addEventListener('click', function () {
+        if (botev.playing) { pauseTimeline(); }
+        else { playTimeline(); }
+      });
+    }
+
+    updateTimelineUI();
+  }
+
+  function goToTimelineStep(index) {
+    if (!botev.points.length) { return; }
+    if (index < 0) { index = 0; }
+    if (index >= botev.points.length) { index = botev.points.length - 1; }
+    botev.currentIndex = index;
+
+    var f  = botev.points[index];
+    var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
+
+    var minZ = f.properties.min_zoom || 8;
+    var targetZoom = Math.max(map.getZoom(), minZ);
+    if (targetZoom > 9) { targetZoom = 9; }
+    map.flyTo(ll, targetZoom, { duration: 1.0, easeLinearity: 0.4 });
+
+    var entry = botev.content[f.properties.popup_id] || { title: f.properties.name, html: '' };
+    openInfoPanel(f, entry);
+
+    updateActiveRouteProgress();
+    updateTimelineUI();
+  }
+
+  function updateActiveRouteProgress() {
+    if (!botev.activeLayer || botev.currentIndex < 0) { return; }
+    var idx = botev.points[botev.currentIndex].__routeIndex || 0;
+    var slice = botev.routeCoords.slice(0, idx + 1);
+    botev.activeLayer.setLatLngs(slice);
+  }
+
+  function updateTimelineUI() {
+    var f = botev.currentIndex >= 0 ? botev.points[botev.currentIndex] : null;
+
+    var dateEl = document.getElementById('timeline-date');
+    var nameEl = document.getElementById('timeline-name');
+    var slider = document.getElementById('timeline-slider');
+    var play   = document.getElementById('timeline-play');
+
+    if (dateEl) { dateEl.textContent = f ? f.properties.date_label : '—'; }
+    if (nameEl) { nameEl.textContent = f ? f.properties.name : 'Походът на Ботевата чета'; }
+    if (slider) { slider.value = botev.currentIndex >= 0 ? String(botev.currentIndex) : '0'; }
+    if (play)   { play.textContent = botev.playing ? '❚❚ Пауза' : '▶ Пусни'; }
+
+    botev.pointMarkers.forEach(function (m, i) {
+      var el = m.getElement();
+      if (!el) { return; }
+      var dot = el.querySelector('.marker-dot');
+      if (!dot) { return; }
+      if (i === botev.currentIndex) { dot.classList.add('is-active'); }
+      else { dot.classList.remove('is-active'); }
+    });
+  }
+
+  function playTimeline() {
+    if (!botev.points.length) { return; }
+    botev.playing = true;
+    if (botev.currentIndex < 0) { goToTimelineStep(0); }
+    if (botev.playTimer) { clearInterval(botev.playTimer); }
+    botev.playTimer = setInterval(function () {
+      var nxt = botev.currentIndex + 1;
+      if (nxt >= botev.points.length) { pauseTimeline(); return; }
+      goToTimelineStep(nxt);
+    }, botev.playInterval);
+    updateTimelineUI();
+  }
+
+  function pauseTimeline() {
+    botev.playing = false;
+    if (botev.playTimer) { clearInterval(botev.playTimer); botev.playTimer = null; }
+    updateTimelineUI();
   }
 
 })();

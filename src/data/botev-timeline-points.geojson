@@ -1,0 +1,141 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-1875-bucharest",
+        "popup_id": "botev-1875-bucharest",
+        "name": "Букурещ",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1875-09-30",
+        "date_label": "30 септември 1875",
+        "order": 1,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": { "type": "Point", "coordinates": [26.1025, 44.4268] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-1875-giurgiu",
+        "popup_id": "botev-1875-giurgiu",
+        "name": "Гюргево",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1875-11-11",
+        "date_label": "11–12 ноември 1875",
+        "order": 2,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": { "type": "Point", "coordinates": [25.9699, 43.9037] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-radetski",
+        "popup_id": "botev-radetski",
+        "name": "Параход „Радецки“",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-17",
+        "date_label": "17 май 1876",
+        "order": 6,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": { "type": "Point", "coordinates": [23.7, 43.75] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-kozloduy",
+        "popup_id": "botev-kozloduy",
+        "name": "Козлодуй",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-17",
+        "date_label": "17 май 1876",
+        "order": 7,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": { "type": "Point", "coordinates": [23.728, 43.783] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-milin-kamak",
+        "popup_id": "botev-milin-kamak",
+        "name": "Милин камък",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-18",
+        "date_label": "18 май 1876",
+        "order": 9,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": { "type": "Point", "coordinates": [23.57, 43.63] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-okolchitsa",
+        "popup_id": "botev-okolchitsa",
+        "name": "Връх Околчица",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-20",
+        "date_label": "20 май / 1 юни 1876",
+        "order": 11,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": { "type": "Point", "coordinates": [23.48, 43.27] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-kamata",
+        "popup_id": "botev-kamata",
+        "name": "Връх Камарата",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-20",
+        "date_label": "20 май 1876",
+        "order": 12,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": { "type": "Point", "coordinates": [23.5, 43.3] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-rashov-dol",
+        "popup_id": "botev-rashov-dol",
+        "name": "Рашов дол",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-21",
+        "date_label": "21 май 1876",
+        "order": 13,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": { "type": "Point", "coordinates": [23.42, 43.2] }
+    }
+  ]
+}

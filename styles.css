@@ -507,3 +507,356 @@ body.zoom-7 .marker-dot.district-center {
     font-size: 0.9rem;
   }
 }
+
+/* ============================================================
+   BOTEV MARCH — route, timeline points, timeline panel
+   ============================================================ */
+
+:root {
+  --c-botev: #6e2c91;
+  --c-chetnitsi: #b87333;
+}
+
+/* ── Chetnitsi origin markers ────────────────────────────── */
+.chetnitsi-marker {
+  background: radial-gradient(circle at 30% 30%, #e09a52, var(--c-chetnitsi) 70%);
+  border: 2.5px solid #fff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px var(--c-chetnitsi),
+    0 2px 8px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.chetnitsi-marker:hover {
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 2px var(--c-chetnitsi),
+    0 4px 14px rgba(184, 115, 51, 0.6);
+}
+
+.chetnitsi-marker-count {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  user-select: none;
+}
+
+.toggle-swatch--chetnitsi {
+  background: var(--c-chetnitsi);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-chetnitsi);
+  width: 12px;
+  height: 12px;
+}
+
+.legend-icon--chetnitsi {
+  width: 12px;
+  height: 12px;
+  background: var(--c-chetnitsi);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-chetnitsi);
+  border-radius: 50%;
+}
+
+/* ── Chetnitsi sidebar content ───────────────────────────── */
+.chetnitsi-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chetnitsi-summary {
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: var(--c-text);
+  margin: 0;
+}
+
+.chetnitsi-count {
+  font-size: 0.85rem;
+  color: var(--c-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--c-divider);
+}
+
+.chetnitsi-count strong {
+  color: var(--c-chetnitsi);
+  font-size: 1rem;
+}
+
+.chetnitsi-members {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chetnitsi-member-card {
+  background: #faf7f1;
+  border-left: 3px solid var(--c-chetnitsi);
+  border-radius: 3px;
+  padding: 10px 12px;
+}
+
+.chetnitsi-member-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.chetnitsi-member-name {
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--c-header);
+  line-height: 1.25;
+}
+
+.chetnitsi-member-years {
+  font-size: 0.78rem;
+  color: var(--c-text-muted);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+.chetnitsi-member-role {
+  font-size: 0.8rem;
+  color: var(--c-chetnitsi);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  margin-bottom: 4px;
+}
+
+.chetnitsi-member-info {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--c-text);
+}
+
+@media (max-width: 680px) {
+  .chetnitsi-member-head {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+/* Toggle / legend swatches */
+.toggle-swatch--botev {
+  background: var(--c-botev);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-botev);
+  width: 12px;
+  height: 12px;
+}
+
+.legend-icon--botev {
+  width: 12px;
+  height: 12px;
+  background: var(--c-botev);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-botev);
+  border-radius: 50%;
+}
+
+/* Polyline rendering tweaks (color/opacity set via Leaflet options) */
+.botev-route-bg {
+  pointer-events: none;
+}
+
+.botev-route-active {
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(110, 44, 145, 0.45));
+}
+
+/* Timeline point markers */
+.marker-dot.timeline-point {
+  background: #fff;
+  border: 2.5px solid var(--c-botev);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.marker-dot.timeline-point:hover {
+  transform: scale(1.2);
+}
+
+.marker-dot.timeline-point.is-active {
+  background: var(--c-botev);
+  border: 3px solid #fff;
+  box-shadow:
+    0 0 0 2.5px var(--c-botev),
+    0 0 14px rgba(110, 44, 145, 0.65);
+  transform: scale(1.45);
+  z-index: 1000;
+}
+
+.marker-dot.timeline-point.is-active:hover {
+  transform: scale(1.5);
+}
+
+.timeline-numeral {
+  font-family: "Lato", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--c-botev);
+  pointer-events: none;
+  user-select: none;
+}
+
+.marker-dot.timeline-point.is-active .timeline-numeral {
+  color: #fff;
+}
+
+/* ── Timeline panel ──────────────────────────────────────── */
+.timeline-panel {
+  position: absolute;
+  bottom: var(--gap);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(560px, calc(100vw - 2 * var(--gap)));
+  background: var(--c-panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 950;
+  padding: 12px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: "Lato", sans-serif;
+}
+
+.timeline-panel[hidden] {
+  display: none;
+}
+
+.timeline-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.timeline-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-botev);
+}
+
+.timeline-date {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--c-text-muted);
+}
+
+.timeline-name {
+  font-family: "Playfair Display", serif;
+  font-size: 1.05rem;
+  color: var(--c-header);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.timeline-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeline-progress input[type="range"] {
+  flex: 1;
+  width: 100%;
+  accent-color: var(--c-botev);
+  cursor: pointer;
+  height: 4px;
+}
+
+.timeline-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.timeline-btn {
+  flex: 1;
+  background: var(--c-header);
+  color: #fff;
+  border: none;
+  padding: 8px 10px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.18s;
+  font-family: "Lato", sans-serif;
+}
+
+.timeline-btn:hover,
+.timeline-btn:focus-visible {
+  background: #2e2020;
+  outline: none;
+}
+
+.timeline-btn--play {
+  background: var(--c-botev);
+  flex: 1.2;
+}
+
+.timeline-btn--play:hover,
+.timeline-btn--play:focus-visible {
+  background: #5a2275;
+}
+
+@media (max-width: 680px) {
+  .timeline-panel {
+    left: var(--gap);
+    right: var(--gap);
+    width: auto;
+    transform: none;
+    bottom: var(--gap);
+    padding: 10px 12px 12px;
+  }
+
+  /* When the bottom-sheet sidebar is open, lift the timeline above it */
+  body.sidebar-open .timeline-panel {
+    bottom: calc(62% + var(--gap));
+  }
+
+  .timeline-name {
+    font-size: 0.95rem;
+  }
+
+  .timeline-btn {
+    font-size: 0.7rem;
+    padding: 7px 6px;
+  }
+}
+

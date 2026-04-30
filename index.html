@@ -81,6 +81,16 @@
             <span class="toggle-swatch toggle-swatch--apostolic"></span>
             Апостолско събрание
           </label>
+          <label class="layer-toggle">
+            <input type="checkbox" id="toggle-botev" checked />
+            <span class="toggle-swatch toggle-swatch--botev"></span>
+            Походът на Ботевата чета
+          </label>
+          <label class="layer-toggle">
+            <input type="checkbox" id="toggle-chetnitsi" checked />
+            <span class="toggle-swatch toggle-swatch--chetnitsi"></span>
+            Ботеви четници по родни места
+          </label>
         </div>
         <div class="controls-legend">
           <div class="legend-label">Легенда</div>
@@ -104,8 +114,33 @@
             <span class="legend-icon legend-icon--apostolic"></span>
             Апостолско събрание
           </div>
+          <div class="legend-item">
+            <span class="legend-icon legend-icon--botev"></span>
+            Походът на Ботевата чета
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon legend-icon--chetnitsi"></span>
+            Ботеви четници по родни места
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Botev march timeline panel -->
+  <div id="timeline" class="timeline-panel" role="region" aria-label="Хронология на Похода на Ботевата чета" hidden>
+    <div class="timeline-header">
+      <span class="timeline-eyebrow">Походът на Ботевата чета</span>
+      <span class="timeline-date" id="timeline-date">—</span>
+    </div>
+    <div class="timeline-name" id="timeline-name">—</div>
+    <div class="timeline-progress">
+      <input type="range" id="timeline-slider" min="0" max="0" value="0" step="1" aria-label="Плъзгач на хронологията" />
+    </div>
+    <div class="timeline-controls">
+      <button id="timeline-prev" class="timeline-btn" type="button" aria-label="Назад">‹ Назад</button>
+      <button id="timeline-play" class="timeline-btn timeline-btn--play" type="button" aria-label="Пусни / Пауза">▶ Пусни</button>
+      <button id="timeline-next" class="timeline-btn" type="button" aria-label="Напред">Напред ›</button>
     </div>
   </div>
 

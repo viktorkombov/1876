@@ -1,0 +1,2051 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-altimir",
+        "popup_id": "botev-chetnitsi-altimir",
+        "name": "Алтимир",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.723,
+          43.64
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-arbanasi",
+        "popup_id": "botev-chetnitsi-arbanasi",
+        "name": "Арбанаси",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.665,
+          43.097
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-balgarene",
+        "popup_id": "botev-chetnitsi-balgarene",
+        "name": "Българене",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.8,
+          43.25
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-beli-osam",
+        "popup_id": "botev-chetnitsi-beli-osam",
+        "name": "Бели Осъм",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.783,
+          42.883
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-berkovitsa",
+        "popup_id": "botev-chetnitsi-berkovitsa",
+        "name": "Берковица",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.124,
+          43.236
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-bitolya",
+        "popup_id": "botev-chetnitsi-bitolya",
+        "name": "Битоля",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.342,
+          41.031
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-blagoevo",
+        "popup_id": "botev-chetnitsi-blagoevo",
+        "name": "Благоево",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.46,
+          43.61
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-bolgrad",
+        "popup_id": "botev-chetnitsi-bolgrad",
+        "name": "Болград",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.616,
+          45.682
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-boynovtsi",
+        "popup_id": "botev-chetnitsi-boynovtsi",
+        "name": "Бойновци",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.286,
+          42.89
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-bozhentsite",
+        "popup_id": "botev-chetnitsi-bozhentsite",
+        "name": "Боженците",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.425,
+          42.89
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-braila",
+        "popup_id": "botev-chetnitsi-braila",
+        "name": "Браила",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.97,
+          45.27
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-butan",
+        "popup_id": "botev-chetnitsi-butan",
+        "name": "Бутан",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.75,
+          43.65
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-byala-cherkva",
+        "popup_id": "botev-chetnitsi-byala-cherkva",
+        "name": "Бяла черква",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.3,
+          43.2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-dobrinishte",
+        "popup_id": "botev-chetnitsi-dobrinishte",
+        "name": "Добринище",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.562,
+          41.821
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-dobrudzha",
+        "popup_id": "botev-chetnitsi-dobrudzha",
+        "name": "Добруджа",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.9,
+          43.6
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-dolno-sahrane",
+        "popup_id": "botev-chetnitsi-dolno-sahrane",
+        "name": "Долно Сахране",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.24,
+          42.67
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-drashan",
+        "popup_id": "botev-chetnitsi-drashan",
+        "name": "Драшан",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.64,
+          43.265
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-dryanovo",
+        "popup_id": "botev-chetnitsi-dryanovo",
+        "name": "Дряново",
+        "count": 3,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.478,
+          42.978
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-elena",
+        "popup_id": "botev-chetnitsi-elena",
+        "name": "Елена",
+        "count": 3,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8778,
+          42.9297
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-etropole",
+        "popup_id": "botev-chetnitsi-etropole",
+        "name": "Етрополе",
+        "count": 3,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.0,
+          42.833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-gabrovo",
+        "popup_id": "botev-chetnitsi-gabrovo",
+        "name": "Габрово",
+        "count": 3,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.315,
+          42.874
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-gergevets",
+        "popup_id": "botev-chetnitsi-gergevets",
+        "name": "Гергевец",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.43,
+          42.62
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-gorna-kremena",
+        "popup_id": "botev-chetnitsi-gorna-kremena",
+        "name": "Горна Кремена",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.733,
+          43.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-gorna-oryahovitsa",
+        "popup_id": "botev-chetnitsi-gorna-oryahovitsa",
+        "name": "Горна Оряховица",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.7017,
+          43.1278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-gorno-brodi",
+        "popup_id": "botev-chetnitsi-gorno-brodi",
+        "name": "Горно Броди",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.573,
+          41.277
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-gyurgevo",
+        "popup_id": "botev-chetnitsi-gyurgevo",
+        "name": "Гюргево",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9699,
+          43.9037
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-kalofer",
+        "popup_id": "botev-chetnitsi-kalofer",
+        "name": "Калофер",
+        "count": 8,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.975,
+          42.616
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-karageorgievo",
+        "popup_id": "botev-chetnitsi-karageorgievo",
+        "name": "Карагеоргиево",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.072,
+          42.767
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-karlovo",
+        "popup_id": "botev-chetnitsi-karlovo",
+        "name": "Карлово",
+        "count": 8,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.8057,
+          42.6425
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-kolishovtsi",
+        "popup_id": "botev-chetnitsi-kolishovtsi",
+        "name": "Колишовци",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.33,
+          42.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-koprivshtitsa",
+        "popup_id": "botev-chetnitsi-koprivshtitsa",
+        "name": "Копривщица",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.358,
+          42.637
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-kotel",
+        "popup_id": "botev-chetnitsi-kotel",
+        "name": "Котел",
+        "count": 4,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.446,
+          42.887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-kramolin",
+        "popup_id": "botev-chetnitsi-kramolin",
+        "name": "Крамолин",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.03,
+          43.13
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-krivorechna-palanka",
+        "popup_id": "botev-chetnitsi-krivorechna-palanka",
+        "name": "Криворечна паланка",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.333,
+          42.201
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-kutsina",
+        "popup_id": "botev-chetnitsi-kutsina",
+        "name": "Куцина",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.55,
+          43.24
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-latviya",
+        "popup_id": "botev-chetnitsi-latviya",
+        "name": "Латвия",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.1052,
+          56.9496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-lokorsko",
+        "popup_id": "botev-chetnitsi-lokorsko",
+        "name": "Локорско",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.48,
+          42.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-lovech",
+        "popup_id": "botev-chetnitsi-lovech",
+        "name": "Ловеч",
+        "count": 9,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.7139,
+          43.1348
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-lozengrad",
+        "popup_id": "botev-chetnitsi-lozengrad",
+        "name": "Лозенград",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.225,
+          41.735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-lyaskovets",
+        "popup_id": "botev-chetnitsi-lyaskovets",
+        "name": "Лясковец",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.728,
+          43.108
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-machin",
+        "popup_id": "botev-chetnitsi-machin",
+        "name": "Мачин",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.1356,
+          45.2433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-makedoniya",
+        "popup_id": "botev-chetnitsi-makedoniya",
+        "name": "Македония",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7453,
+          41.6086
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-mikre",
+        "popup_id": "botev-chetnitsi-mikre",
+        "name": "Микре",
+        "count": 5,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.8,
+          43.16
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-mirkovo",
+        "popup_id": "botev-chetnitsi-mirkovo",
+        "name": "Мирково",
+        "count": 3,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.995,
+          42.687
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-nevrokop",
+        "popup_id": "botev-chetnitsi-nevrokop",
+        "name": "Неврокоп",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.729,
+          41.574
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-novata-mahala",
+        "popup_id": "botev-chetnitsi-novata-mahala",
+        "name": "Новата махала",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.127,
+          42.914
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-ohrid",
+        "popup_id": "botev-chetnitsi-ohrid",
+        "name": "Охрид",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.8016,
+          41.1231
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-oreshak",
+        "popup_id": "botev-chetnitsi-oreshak",
+        "name": "Орешак",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.766,
+          42.883
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-oryahovo",
+        "popup_id": "botev-chetnitsi-oryahovo",
+        "name": "Оряхово",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.96,
+          43.737
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-osmo-kalugerovo",
+        "popup_id": "botev-chetnitsi-osmo-kalugerovo",
+        "name": "Осмо Калугерово",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.383,
+          42.4
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-panagyurishte",
+        "popup_id": "botev-chetnitsi-panagyurishte",
+        "name": "Панагюрище",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.1883,
+          42.5048
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-peshtera",
+        "popup_id": "botev-chetnitsi-peshtera",
+        "name": "Пещера",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.3,
+          42.033
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-pirdop",
+        "popup_id": "botev-chetnitsi-pirdop",
+        "name": "Пирдоп",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.183,
+          42.7
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-pleven",
+        "popup_id": "botev-chetnitsi-pleven",
+        "name": "Плевен",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.6167,
+          43.4167
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-podgoritsa",
+        "popup_id": "botev-chetnitsi-podgoritsa",
+        "name": "Подгорица",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.2594,
+          42.4304
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-pravets",
+        "popup_id": "botev-chetnitsi-pravets",
+        "name": "Правец",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.917,
+          42.883
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-prizren",
+        "popup_id": "botev-chetnitsi-prizren",
+        "name": "Призрен",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.7394,
+          42.2139
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-radinovo",
+        "popup_id": "botev-chetnitsi-radinovo",
+        "name": "Радиново",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.651,
+          42.19
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-ravna",
+        "popup_id": "botev-chetnitsi-ravna",
+        "name": "Равна",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.87,
+          43.0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-rumaniya",
+        "popup_id": "botev-chetnitsi-rumaniya",
+        "name": "Румъния",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.9668,
+          45.9432
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-ruse",
+        "popup_id": "botev-chetnitsi-ruse",
+        "name": "Русе",
+        "count": 3,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9534,
+          43.8356
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-ruska-byala",
+        "popup_id": "botev-chetnitsi-ruska-byala",
+        "name": "Руска Бяла",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.683,
+          43.283
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-samokov",
+        "popup_id": "botev-chetnitsi-samokov",
+        "name": "Самоков",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.5528,
+          42.337
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-sevlievo",
+        "popup_id": "botev-chetnitsi-sevlievo",
+        "name": "Севлиево",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.1142,
+          43.0258
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-shumen",
+        "popup_id": "botev-chetnitsi-shumen",
+        "name": "Шумен",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.9294,
+          43.2712
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-silistrensko",
+        "popup_id": "botev-chetnitsi-silistrensko",
+        "name": "Силистренско",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.26,
+          44.116
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-skravena",
+        "popup_id": "botev-chetnitsi-skravena",
+        "name": "Скравена",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.675,
+          42.983
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-sliven",
+        "popup_id": "botev-chetnitsi-sliven",
+        "name": "Сливен",
+        "count": 6,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.322,
+          42.681
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-smilets",
+        "popup_id": "botev-chetnitsi-smilets",
+        "name": "Смилец",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.08,
+          43.75
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-smolsko",
+        "popup_id": "botev-chetnitsi-smolsko",
+        "name": "Смолско",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.9,
+          42.63
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-sofiya",
+        "popup_id": "botev-chetnitsi-sofiya",
+        "name": "София",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.3219,
+          42.6977
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-sopot",
+        "popup_id": "botev-chetnitsi-sopot",
+        "name": "Сопот",
+        "count": 5,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.754,
+          42.652
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-stara-zagora",
+        "popup_id": "botev-chetnitsi-stara-zagora",
+        "name": "Стара Загора",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.6257,
+          42.4258
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-suhindol",
+        "popup_id": "botev-chetnitsi-suhindol",
+        "name": "Сухиндол",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.181,
+          43.192
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-svishtov",
+        "popup_id": "botev-chetnitsi-svishtov",
+        "name": "Свищов",
+        "count": 8,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.35,
+          43.619
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-targovishte",
+        "popup_id": "botev-chetnitsi-targovishte",
+        "name": "Търговище",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.5728,
+          43.2469
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-tarhovo",
+        "popup_id": "botev-chetnitsi-tarhovo",
+        "name": "Търхово",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.245,
+          42.985
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-tarnovo",
+        "popup_id": "botev-chetnitsi-tarnovo",
+        "name": "Търново",
+        "count": 6,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.6325,
+          43.0757
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-teteven",
+        "popup_id": "botev-chetnitsi-teteven",
+        "name": "Тетевен",
+        "count": 11,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.263,
+          42.917
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-tetovo",
+        "popup_id": "botev-chetnitsi-tetovo",
+        "name": "Тетово",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.971,
+          42.006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-troyan",
+        "popup_id": "botev-chetnitsi-troyan",
+        "name": "Троян",
+        "count": 5,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.7139,
+          42.8943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-tryavna",
+        "popup_id": "botev-chetnitsi-tryavna",
+        "name": "Трявна",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.491,
+          42.866
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-tsenino",
+        "popup_id": "botev-chetnitsi-tsenino",
+        "name": "Ценино",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.34,
+          42.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-tulcha",
+        "popup_id": "botev-chetnitsi-tulcha",
+        "name": "Тулча",
+        "count": 3,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.8017,
+          45.1787
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-turiya",
+        "popup_id": "botev-chetnitsi-turiya",
+        "name": "Турия",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.15,
+          42.65
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-varbovo",
+        "popup_id": "botev-chetnitsi-varbovo",
+        "name": "Върбово",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.8,
+          43.65
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-veles",
+        "popup_id": "botev-chetnitsi-veles",
+        "name": "Велес",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.775,
+          41.716
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-vidin",
+        "popup_id": "botev-chetnitsi-vidin",
+        "name": "Видин",
+        "count": 2,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.872,
+          43.985
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-vladimirovo",
+        "popup_id": "botev-chetnitsi-vladimirovo",
+        "name": "Владимирово",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.68,
+          43.58
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-vratsa",
+        "popup_id": "botev-chetnitsi-vratsa",
+        "name": "Враца",
+        "count": 7,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.5528,
+          43.2102
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-yakoruda",
+        "popup_id": "botev-chetnitsi-yakoruda",
+        "name": "Якоруда",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.684,
+          42.025
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-yastrebna",
+        "popup_id": "botev-chetnitsi-yastrebna",
+        "name": "Ястребна",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.94,
+          44.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-chetnitsi-zlatevtsi",
+        "popup_id": "botev-chetnitsi-zlatevtsi",
+        "name": "Златевци",
+        "count": 1,
+        "feature_type": "chetnitsi_origin",
+        "layer_group": "botev_chetnitsi",
+        "style_group": "chetnitsi-origin",
+        "min_zoom": 7,
+        "max_zoom": 9,
+        "coordinates_status": "known"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.314,
+          42.895
+        ]
+      }
+    }
+  ]
+}
