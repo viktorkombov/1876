@@ -541,9 +541,10 @@
       slider.min   = '0';
       slider.max   = String(Math.max(0, botev.points.length - 1));
       slider.value = '0';
-      slider.addEventListener('input', function (e) {
+      slider.addEventListener('change', function (e) {
         if (botev.isAnimating) { return; }
-        var i = parseInt(e.target.value, 10) || 0;
+        var i = parseInt(e.target.value, 10);
+        if (isNaN(i)) { i = 0; }
         goToTimelineStep(i);
       });
     }
@@ -571,8 +572,13 @@
     var play = document.getElementById('timeline-play');
     if (play) {
       play.addEventListener('click', function () {
-        if (botev.playing) { pauseTimeline(); }
-        else { playTimeline(); }
+        if (botev.isAnimating) { return; }
+        var isFinished = !botev.playing &&
+          botev.currentIndex >= 0 &&
+          botev.currentIndex >= botev.points.length - 1;
+        if (isFinished)      { restartTimeline(); }
+        else if (botev.playing) { pauseTimeline(); }
+        else                 { playTimeline(); }
       });
     }
 
@@ -646,6 +652,9 @@
 
   function updateTimelineUI() {
     var f = botev.currentIndex >= 0 ? botev.points[botev.currentIndex] : null;
+    var isFinished = !botev.playing &&
+      botev.currentIndex >= 0 &&
+      botev.currentIndex >= botev.points.length - 1;
 
     var dateEl = document.getElementById('timeline-date');
     var nameEl = document.getElementById('timeline-name');
@@ -657,8 +666,15 @@
 
     if (dateEl) { dateEl.textContent = f ? f.properties.date_label : ''; }
     if (nameEl) { nameEl.textContent = f ? f.properties.name : 'Походът на Ботевата чета'; }
-    if (slider) { slider.value = botev.currentIndex >= 0 ? String(botev.currentIndex) : '0'; }
-    if (play)   { play.textContent = botev.playing ? '❚❚ Пауза' : '▶ Пусни'; }
+    if (slider) {
+      slider.value    = botev.currentIndex >= 0 ? String(botev.currentIndex) : '0';
+      slider.disabled = botev.isAnimating;
+    }
+    if (play) {
+      if (isFinished)        { play.textContent = '↺ Отначало'; }
+      else if (botev.playing){ play.textContent = '❚❚ Пауза'; }
+      else                   { play.textContent = '▶ Пусни'; }
+    }
 
     /* Disable / enable Prev & Next during fly animation */
     if (prevBtn) { prevBtn.disabled = botev.isAnimating; }
@@ -691,6 +707,15 @@
     botev.playing = false;
     if (botev.playTimer) { clearInterval(botev.playTimer); botev.playTimer = null; }
     updateTimelineUI();
+  }
+
+  function restartTimeline() {
+    if (botev.playTimer) { clearInterval(botev.playTimer); botev.playTimer = null; }
+    botev.playing      = false;
+    botev.currentIndex = -1;
+    if (botev.activeLayer) { botev.activeLayer.setLatLngs([]); }
+    updateTimelineUI();
+    playTimeline();
   }
 
 })();
