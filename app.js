@@ -50,7 +50,8 @@
     currentIndex:  -1,
     playing:       false,
     playTimer:     null,
-    playInterval:  2500
+    playInterval:  2500,
+    isAnimating:   false
   };
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -64,6 +65,9 @@
       if (layerOn.botev) { showBotevLayers(); }
       initTimelineControl();
       return loadChetnitsiData();
+    }).then(function () {
+      renderVisibleLayers();
+      bindControls();
     });
   });
 
@@ -494,6 +498,7 @@
       slider.max   = String(Math.max(0, botev.points.length - 1));
       slider.value = '0';
       slider.addEventListener('input', function (e) {
+        if (botev.isAnimating) { return; }
         var i = parseInt(e.target.value, 10) || 0;
         goToTimelineStep(i);
       });
@@ -502,6 +507,7 @@
     var prev = document.getElementById('timeline-prev');
     if (prev) {
       prev.addEventListener('click', function () {
+        if (botev.isAnimating) { return; }
         var i = (botev.currentIndex < 0 ? 0 : botev.currentIndex - 1);
         if (i < 0) { i = 0; }
         goToTimelineStep(i);
@@ -511,6 +517,7 @@
     var next = document.getElementById('timeline-next');
     if (next) {
       next.addEventListener('click', function () {
+        if (botev.isAnimating) { return; }
         var i = (botev.currentIndex < 0 ? 0 : botev.currentIndex + 1);
         if (i >= botev.points.length) { i = botev.points.length - 1; }
         goToTimelineStep(i);
@@ -537,16 +544,25 @@
     var f  = botev.points[index];
     var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
 
-    var minZ = f.properties.min_zoom || 8;
-    var targetZoom = Math.max(map.getZoom(), minZ);
-    if (targetZoom > 9) { targetZoom = 9; }
-    map.flyTo(ll, targetZoom, { duration: 1.0, easeLinearity: 0.4 });
-
     var entry = botev.content[f.properties.popup_id] || { title: f.properties.name, html: '' };
     openInfoPanel(f, entry);
 
     updateActiveRouteProgress();
+
+    /* Lock navigation for the duration of the fly animation */
+    botev.isAnimating = true;
     updateTimelineUI();
+
+    var minZ = f.properties.min_zoom || 8;
+    var targetZoom = Math.max(map.getZoom(), minZ);
+    if (targetZoom > 9) { targetZoom = 9; }
+
+    map.once('moveend', function () {
+      botev.isAnimating = false;
+      updateTimelineUI();
+    });
+
+    map.flyTo(ll, targetZoom, { duration: 1.0, easeLinearity: 0.4 });
   }
 
   function updateActiveRouteProgress() {
@@ -564,10 +580,17 @@
     var slider = document.getElementById('timeline-slider');
     var play   = document.getElementById('timeline-play');
 
+    var prevBtn = document.getElementById('timeline-prev');
+    var nextBtn = document.getElementById('timeline-next');
+
     if (dateEl) { dateEl.textContent = f ? f.properties.date_label : '—'; }
     if (nameEl) { nameEl.textContent = f ? f.properties.name : 'Походът на Ботевата чета'; }
     if (slider) { slider.value = botev.currentIndex >= 0 ? String(botev.currentIndex) : '0'; }
     if (play)   { play.textContent = botev.playing ? '❚❚ Пауза' : '▶ Пусни'; }
+
+    /* Disable / enable Prev & Next during fly animation */
+    if (prevBtn) { prevBtn.disabled = botev.isAnimating; }
+    if (nextBtn) { nextBtn.disabled = botev.isAnimating; }
 
     botev.pointMarkers.forEach(function (m, i) {
       var el = m.getElement();

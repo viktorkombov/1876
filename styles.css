@@ -835,6 +835,12 @@ body.zoom-7 .marker-dot.district-center {
   background: #5a2275;
 }
 
+.timeline-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 @media (max-width: 680px) {
   .timeline-panel {
     left: var(--gap);
