@@ -188,7 +188,6 @@
     if (layerGroups.apostolic)      { map.removeLayer(layerGroups.apostolic); }
     if (layerGroups.okrazhenCenters){ map.removeLayer(layerGroups.okrazhenCenters); }
     if (layerGroups.districts)      { map.removeLayer(layerGroups.districts); }
-    if (layerGroups.chetnitsi)      { map.removeLayer(layerGroups.chetnitsi); }
 
     var vis = function (key) {
       return layerOn[key]
@@ -201,7 +200,21 @@
     layerGroups.apostolic       = createMarkerLayer(vis('apostolic')).addTo(map);
     layerGroups.okrazhenCenters = createMarkerLayer(vis('okrazhenCenters')).addTo(map);
     layerGroups.districts       = createMarkerLayer(vis('districts')).addTo(map);
-    layerGroups.chetnitsi       = createChetnitsiLayer(vis('chetnitsi')).addTo(map);
+
+    /* Chetnitsi cluster is NEVER destroyed on zoom — markercluster handles
+       zoom-based clustering internally. We only create it once (when data
+       is available) and then just add/remove from the map.  Destroying and
+       recreating on every zoomend kills the CSS fly-out transition mid-air. */
+    if (!layerGroups.chetnitsi && allFeatures.chetnitsi.length) {
+      layerGroups.chetnitsi = createChetnitsiLayer(allFeatures.chetnitsi);
+    }
+    if (layerGroups.chetnitsi) {
+      if (layerOn.chetnitsi && !map.hasLayer(layerGroups.chetnitsi)) {
+        layerGroups.chetnitsi.addTo(map);
+      } else if (!layerOn.chetnitsi && map.hasLayer(layerGroups.chetnitsi)) {
+        map.removeLayer(layerGroups.chetnitsi);
+      }
+    }
   }
 
   function openInfoPanel(feature, popupEntry) {
@@ -294,7 +307,10 @@
     if (chetToggle) {
       chetToggle.addEventListener('change', function (e) {
         layerOn.chetnitsi = e.target.checked;
-        renderVisibleLayers();
+        if (layerGroups.chetnitsi) {
+          if (layerOn.chetnitsi) { layerGroups.chetnitsi.addTo(map); }
+          else { map.removeLayer(layerGroups.chetnitsi); }
+        }
       });
     }
   }
@@ -327,7 +343,7 @@
       maxClusterRadius:        60,
       spiderfyOnMaxZoom:       false,
       showCoverageOnHover:     false,
-      zoomToBoundsOnClick:     false, /* we handle click ourselves for smooth flyTo */
+      zoomToBoundsOnClick:     false, /* handled manually below for padding + animation */
       iconCreateFunction: function (clusterObj) {
         var total = 0;
         clusterObj.getAllChildMarkers().forEach(function (m) {
@@ -344,6 +360,9 @@
       }
     });
 
+    /* fitBounds fires the discrete zoomanim event that markercluster needs
+       to position each child at the cluster center before the CSS transition
+       flies it to its real position. flyToBounds skips that event entirely. */
     cluster.on('clusterclick', function (e) {
       map.flyToBounds(e.layer.getBounds(), {
         padding:  [48, 48],
@@ -352,6 +371,7 @@
         easeLinearity: 0.4
       });
     });
+
 
     features.forEach(function (f) {
       var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
