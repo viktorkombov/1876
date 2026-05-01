@@ -76,14 +76,49 @@
       center:             INIT_CENTER,
       zoom:               INIT_ZOOM,
       zoomControl:        true,
-      attributionControl: true
+      attributionControl: true,
+      /* ── Anti-flicker options ────────────────────────────────────
+         zoomAnimation      keep the CSS zoom transition (smooth feel)
+         zoomAnimationThreshold  only animate when the zoom delta is small;
+                            large jumps skip the animation and avoid the
+                            blank-tile flash that happens mid-transition.
+         fadeAnimation      fade new tiles in instead of popping in;
+                            prevents the hard white flash on tile swap.
+         markerZoomAnimation keep markers in sync with the tile transition
+                            so they don't jump independently.
+      ──────────────────────────────────────────────────────────── */
+      zoomAnimation:           true,
+      zoomAnimationThreshold:  4,
+      fadeAnimation:           true,
+      markerZoomAnimation:     true
     });
 
     L.tileLayer(TILE_URL, {
       minZoom:     7,
       maxZoom:     9,
       tms:         false,
-      attribution: '© QGIS'
+      attribution: '© QGIS',
+      /* ── Anti-flicker options ────────────────────────────────────
+         keepBuffer   number of extra tile rows/columns to keep loaded
+                      around the viewport. Default is 2; raising it to 4
+                      means adjacent tiles are already cached when the
+                      user pans, so there is no blank gap before they
+                      appear.  Uses more memory but eliminates the
+                      "checkerboard" flash on pan and gentle zooms.
+         updateWhenIdle  only request new tiles after panning stops
+                         (default on mobile). On desktop this is false
+                         which fires many mid-pan requests; setting it
+                         true reduces request churn and visual noise.
+         updateWhenZooming  false means Leaflet does NOT request new
+                            tiles on every intermediate zoom step during
+                            a pinch/scroll — only when the zoom settles.
+                            This is the single biggest cause of flicker
+                            on zoom and should always be false for
+                            static/offline tile sets.
+      ──────────────────────────────────────────────────────────── */
+      keepBuffer:          4,
+      updateWhenIdle:      true,
+      updateWhenZooming:   false
     }).addTo(map);
 
     map.on('zoomend', function () {
