@@ -34,9 +34,10 @@
   var popupData   = {};
   var allFeatures = { points: [], detachments: [], districts: [], apostolic: [], okrazhenCenters: [], chetnitsi: [] };
   var layerGroups = { points: null, detachments: null, districts: null, apostolic: null, okrazhenCenters: null, chetnitsi: null };
-  var layerOn     = { points: true, detachments: true, districts: true, apostolic: true, okrazhenCenters: true, botev: true, chetnitsi: true };
+  var layerOn     = { points: true, detachments: true, districts: true, apostolic: true, okrazhenCenters: true, botev: true, chetnitsi: false };
 
-  var chetnitsiContent = {};
+  var chetnitsiContent    = {};
+  var chetnitsiUserDisabled = false; /* becomes true only if user explicitly unchecks */
 
   /* Botev timeline state */
   var botev = {
@@ -306,7 +307,8 @@
     var chetToggle = document.getElementById('toggle-chetnitsi');
     if (chetToggle) {
       chetToggle.addEventListener('change', function (e) {
-        layerOn.chetnitsi = e.target.checked;
+        layerOn.chetnitsi       = e.target.checked;
+        chetnitsiUserDisabled   = !e.target.checked;
         if (layerGroups.chetnitsi) {
           if (layerOn.chetnitsi) { layerGroups.chetnitsi.addTo(map); }
           else { map.removeLayer(layerGroups.chetnitsi); }
@@ -755,7 +757,11 @@
     if (botev.playTimer) { clearInterval(botev.playTimer); }
     botev.playTimer = setInterval(function () {
       var nxt = botev.currentIndex + 1;
-      if (nxt >= botev.points.length) { pauseTimeline(); return; }
+      if (nxt >= botev.points.length) {
+        pauseTimeline();
+        revealChetnitsiLayer();
+        return;
+      }
       goToTimelineStep(nxt);
     }, botev.playInterval);
     updateTimelineUI();
@@ -765,6 +771,33 @@
     botev.playing = false;
     if (botev.playTimer) { clearInterval(botev.playTimer); botev.playTimer = null; }
     updateTimelineUI();
+  }
+
+  /* Auto-reveal the chetnitsi layer when the full route play finishes,
+     unless the user has explicitly toggled it off. */
+  function revealChetnitsiLayer() {
+    if (chetnitsiUserDisabled) { return; }  /* user opted out */
+    if (layerOn.chetnitsi)    { return; }  /* already visible */
+
+    layerOn.chetnitsi = true;
+    var cb = document.getElementById('toggle-chetnitsi');
+    if (cb) { cb.checked = true; }
+
+    /* Add body class BEFORE adding layer so newly-created marker divs
+       inherit the animation while it's active */
+    document.body.classList.add('chetnitsi-reveal');
+
+    if (layerGroups.chetnitsi && !map.hasLayer(layerGroups.chetnitsi)) {
+      layerGroups.chetnitsi.addTo(map);
+    } else if (!layerGroups.chetnitsi && allFeatures.chetnitsi.length) {
+      layerGroups.chetnitsi = createChetnitsiLayer(allFeatures.chetnitsi);
+      layerGroups.chetnitsi.addTo(map);
+    }
+
+    /* Remove the reveal class after the longest marker animation finishes */
+    setTimeout(function () {
+      document.body.classList.remove('chetnitsi-reveal');
+    }, 900);
   }
 
   function restartTimeline() {

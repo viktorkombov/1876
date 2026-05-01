@@ -526,6 +526,19 @@ body.zoom-7 .marker-dot.district-center {
 
 /* ── Chetnitsi origin markers ────────────────────────────── */
 
+/* Reveal animation: plays on each marker when the layer is auto-shown
+   after the route animation finishes. Spring bounce scale-in. */
+@keyframes chetnitsiReveal {
+  0%   { transform: scale(0);    opacity: 0; }
+  65%  { transform: scale(1.18); opacity: 1; }
+  85%  { transform: scale(0.94); }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+body.chetnitsi-reveal .chetnitsi-marker {
+  animation: chetnitsiReveal 0.55s ease-out both;
+}
+
 /* Cluster split/merge: markers fly from the cluster center to their positions.
    A smooth cubic-bezier gives the elastic "fly out" feel from the demo. */
 .leaflet-cluster-anim .leaflet-marker-icon,
@@ -707,36 +720,41 @@ body.zoom-7 .marker-dot.district-center {
 
 /* Timeline point markers */
 .marker-dot.timeline-point {
-  background: #fff;
-  border: 2.5px solid var(--c-botev);
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1.5px solid rgba(110, 44, 145, 0.45);
+  box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s, opacity 0.2s;
+  opacity: 0.6;
 }
 
 .marker-dot.timeline-point:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.9);
+  border-color: var(--c-botev);
   transform: scale(1.2);
 }
 
 .marker-dot.timeline-point.is-active {
   background: var(--c-botev);
-  border: 3px solid #fff;
+  border: 2px solid #fff;
   box-shadow:
-    0 0 0 2.5px var(--c-botev),
-    0 0 14px rgba(110, 44, 145, 0.65);
-  transform: scale(1.45);
+    0 0 0 2px var(--c-botev),
+    0 0 10px rgba(110, 44, 145, 0.5);
+  transform: scale(1.35);
+  opacity: 1;
   z-index: 1000;
 }
 
 .marker-dot.timeline-point.is-active:hover {
-  transform: scale(1.5);
+  transform: scale(1.45);
 }
 
 .timeline-numeral {
   font-family: "Lato", sans-serif;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   line-height: 1;
   color: var(--c-botev);
