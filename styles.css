@@ -525,6 +525,21 @@ body.zoom-7 .marker-dot.district-center {
 }
 
 /* ── Chetnitsi origin markers ────────────────────────────── */
+
+/* Scale-in keyframe: plays every time a marker/cluster icon is added to DOM
+   (i.e. on both split-from-cluster and merge-into-cluster transitions) */
+@keyframes chetnitsiMarkerIn {
+  from { transform: scale(0.2); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* Make the built-in markercluster split/merge transition smoother */
+.leaflet-cluster-anim .leaflet-marker-icon,
+.leaflet-cluster-anim .leaflet-marker-shadow {
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              opacity 0.45s ease-in-out;
+}
+
 .chetnitsi-marker {
   background: radial-gradient(circle at 30% 30%, #e09a52, var(--c-chetnitsi) 70%);
   border: 2.5px solid #fff;
@@ -536,6 +551,7 @@ body.zoom-7 .marker-dot.district-center {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  animation: chetnitsiMarkerIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   transition: transform 0.15s, box-shadow 0.15s;
 }
 
@@ -549,7 +565,7 @@ body.zoom-7 .marker-dot.district-center {
 .chetnitsi-marker-count {
   font-family: "Lato", sans-serif;
   font-weight: 700;
-  font-size: 13px;
+  /* font-size set inline per marker (proportional to size) */
   line-height: 1;
   color: #fff;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);

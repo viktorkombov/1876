@@ -315,25 +315,63 @@
     });
   }
 
+  /* Returns px diameter for a chetnitsi marker scaled by sqrt of count.
+     Range for count 1-11: 20-34 px. Clusters can go up to ~60 px. */
+  function chetnitsiMarkerSize(count) {
+    return Math.min(60, Math.round(14 + 6 * Math.sqrt(Math.max(1, count))));
+  }
+
   function createChetnitsiLayer(features) {
-    var markers = features.map(function (f) {
-      var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
-      return renderChetnitsiMarker(f, ll);
+    var cluster = L.markerClusterGroup({
+      disableClusteringAtZoom: 9,   /* at max zoom show all individually   */
+      maxClusterRadius:        60,
+      spiderfyOnMaxZoom:       false,
+      showCoverageOnHover:     false,
+      zoomToBoundsOnClick:     false, /* we handle click ourselves for smooth flyTo */
+      iconCreateFunction: function (clusterObj) {
+        var total = 0;
+        clusterObj.getAllChildMarkers().forEach(function (m) {
+          total += m.options._chetnitsiCount || 0;
+        });
+        var size     = chetnitsiMarkerSize(total);
+        var fontSize = Math.min(13, Math.max(9, Math.round(size * 0.45)));
+        return L.divIcon({
+          className:   '',
+          html:        '<div class="chetnitsi-marker" style="width:' + size + 'px;height:' + size + 'px;"><span class="chetnitsi-marker-count" style="font-size:' + fontSize + 'px">' + total + '</span></div>',
+          iconSize:    [size, size],
+          iconAnchor:  [size / 2, size / 2]
+        });
+      }
     });
-    return L.layerGroup(markers);
+
+    cluster.on('clusterclick', function (e) {
+      map.flyToBounds(e.layer.getBounds(), {
+        padding:  [48, 48],
+        maxZoom:  9,
+        duration: 0.6,
+        easeLinearity: 0.4
+      });
+    });
+
+    features.forEach(function (f) {
+      var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
+      cluster.addLayer(renderChetnitsiMarker(f, ll));
+    });
+    return cluster;
   }
 
   function renderChetnitsiMarker(feature, latlng) {
-    var count = feature.properties.count || 0;
-    var size  = count >= 10 ? 36 : (count >= 5 ? 32 : 28);
-    var icon  = L.divIcon({
+    var count    = feature.properties.count || 0;
+    var size     = chetnitsiMarkerSize(count);
+    var fontSize = Math.min(13, Math.max(9, Math.round(size * 0.45)));
+    var icon = L.divIcon({
       className:   '',
-      html:        '<div class="chetnitsi-marker" style="width:' + size + 'px;height:' + size + 'px;"><span class="chetnitsi-marker-count">' + count + '</span></div>',
+      html:        '<div class="chetnitsi-marker" style="width:' + size + 'px;height:' + size + 'px;"><span class="chetnitsi-marker-count" style="font-size:' + fontSize + 'px">' + count + '</span></div>',
       iconSize:    [size, size],
       iconAnchor:  [size / 2, size / 2],
       popupAnchor: [0, -(size / 2 + 4)]
     });
-    var m = L.marker(latlng, { icon: icon, title: feature.properties.name });
+    var m = L.marker(latlng, { icon: icon, title: feature.properties.name, _chetnitsiCount: count });
     m.on('click', function () { openChetnitsiPanel(feature); });
     return m;
   }
