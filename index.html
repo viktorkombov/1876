@@ -45,14 +45,15 @@
     </div>
   </aside>
 
-  <!-- Layer controls + legend -->
-  <div id="controls" class="controls-panel is-collapsed">
-    <button id="controls-toggle" class="controls-toggle" aria-expanded="true" aria-label="Покажи/скрий слоевете">
-      <span class="controls-toggle-label">Слоеве</span>
-      <svg class="controls-toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="6 9 12 15 18 9"/>
-      </svg>
-    </button>
+  <!-- Layer controls + legend, and collapsed timeline stub stacked together -->
+  <div id="panel-stack">
+    <div id="controls" class="controls-panel is-collapsed">
+      <button id="controls-toggle" class="controls-toggle" aria-expanded="true" aria-label="Покажи/скрий слоевете">
+        <span class="controls-toggle-label">Слоеве</span>
+        <svg class="controls-toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
     <div class="controls-collapse">
       <div class="controls-collapse-inner">
         <div class="controls-body">
@@ -125,13 +126,19 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
+
+    <!-- Timeline stub — shown when timeline panel is manually collapsed -->
+    <button id="timeline-stub" class="timeline-stub" hidden
+      type="button" aria-label="Покажи хронологията">&#9654; Ботевата чета</button>
+  </div><!-- /#panel-stack -->
 
   <!-- Botev march timeline panel -->
   <div id="timeline" class="timeline-panel" role="region" aria-label="Хронология на Похода на Ботевата чета" hidden>
     <div class="timeline-header">
       <span class="timeline-eyebrow">Походът на Ботевата чета</span>
-      <span class="timeline-date" id="timeline-date">—</span>
+      <span class="timeline-date" id="timeline-date"></span>
+      <button id="timeline-collapse" class="timeline-collapse-btn" type="button" aria-label="Скрий панела" title="Смали панела">−</button>
     </div>
     <div class="timeline-name" id="timeline-name">—</div>
     <div class="timeline-progress">

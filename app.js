@@ -40,18 +40,19 @@
 
   /* Botev timeline state */
   var botev = {
-    routeCoords:   [],     /* flattened [[lat,lng], ...]  */
-    points:        [],     /* sorted timeline features    */
-    content:       {},
-    routeLayer:    null,   /* faint full route            */
-    activeLayer:   null,   /* highlighted progress        */
-    pointsLayer:   null,
-    pointMarkers:  [],
-    currentIndex:  -1,
-    playing:       false,
-    playTimer:     null,
-    playInterval:  2500,
-    isAnimating:   false
+    routeCoords:    [],     /* flattened [[lat,lng], ...]  */
+    points:         [],     /* sorted timeline features    */
+    content:        {},
+    routeLayer:     null,   /* faint full route            */
+    activeLayer:    null,   /* highlighted progress        */
+    pointsLayer:    null,
+    pointMarkers:   [],
+    currentIndex:   -1,
+    playing:        false,
+    playTimer:      null,
+    playInterval:   2500,
+    isAnimating:    false,
+    panelCollapsed: false   /* manually minimised by user  */
   };
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -510,15 +511,23 @@
   function setBotevVisible(on) {
     layerOn.botev = !!on;
     var panel = document.getElementById('timeline');
+    var stub  = document.getElementById('timeline-stub');
     if (on) {
       showBotevLayers();
-      if (panel) { panel.hidden = false; }
+      if (botev.panelCollapsed) {
+        if (panel) { panel.hidden = true; }
+        if (stub)  { stub.hidden  = false; }
+      } else {
+        if (panel) { panel.hidden = false; }
+        if (stub)  { stub.hidden  = true; }
+      }
       // re-apply active class after markers re-attach
       setTimeout(updateTimelineUI, 0);
     } else {
       pauseTimeline();
       hideBotevLayers();
       if (panel) { panel.hidden = true; }
+      if (stub)  { stub.hidden  = true; }
     }
   }
 
@@ -565,6 +574,29 @@
         if (botev.playing) { pauseTimeline(); }
         else { playTimeline(); }
       });
+    }
+
+    /* ── Panel collapse / expand ─────────────────────────── */
+    var collapseBtn = document.getElementById('timeline-collapse');
+    var stub        = document.getElementById('timeline-stub');
+
+    function collapsePanel() {
+      botev.panelCollapsed = true;
+      if (panel) { panel.hidden = true; }
+      if (stub)  { stub.hidden  = false; }
+    }
+
+    function expandPanel() {
+      botev.panelCollapsed = false;
+      if (panel) { panel.hidden = false; }
+      if (stub)  { stub.hidden  = true; }
+    }
+
+    if (collapseBtn) {
+      collapseBtn.addEventListener('click', function () { collapsePanel(); });
+    }
+    if (stub) {
+      stub.addEventListener('click', function () { expandPanel(); });
     }
 
     updateTimelineUI();
@@ -623,7 +655,7 @@
     var prevBtn = document.getElementById('timeline-prev');
     var nextBtn = document.getElementById('timeline-next');
 
-    if (dateEl) { dateEl.textContent = f ? f.properties.date_label : '—'; }
+    if (dateEl) { dateEl.textContent = f ? f.properties.date_label : ''; }
     if (nameEl) { nameEl.textContent = f ? f.properties.name : 'Походът на Ботевата чета'; }
     if (slider) { slider.value = botev.currentIndex >= 0 ? String(botev.currentIndex) : '0'; }
     if (play)   { play.textContent = botev.playing ? '❚❚ Пауза' : '▶ Пусни'; }

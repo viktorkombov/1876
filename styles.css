@@ -188,15 +188,22 @@ body:not(.sidebar-open) .leaflet-left {
   color: var(--c-text-muted);
 }
 
-/* ── Controls panel ──────────────────────────────────────── */
-.controls-panel {
+/* ── Controls + timeline-stub wrapper ─────────────────────── */
+#panel-stack {
   position: absolute;
   top: var(--gap);
   right: var(--gap);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  z-index: 900;
+}
+
+/* ── Controls panel ──────────────────────────────────────────── */
+.controls-panel {
   background: var(--c-panel);
   border-radius: var(--radius);
   box-shadow: 0 2px 18px rgba(0, 0, 0, 0.13);
-  z-index: 900;
   min-width: 204px;
   overflow: hidden;
 }
@@ -488,8 +495,8 @@ body.zoom-7 .marker-dot.district-center {
     transform: translateY(0);
   }
 
-  /* Controls move to bottom-right on mobile */
-  .controls-panel {
+  /* Controls stack stays top-right on mobile (same as default) */
+  #panel-stack {
     top: var(--gap);
     right: var(--gap);
   }
@@ -737,15 +744,15 @@ body.zoom-7 .marker-dot.district-center {
   bottom: var(--gap);
   left: 50%;
   transform: translateX(-50%);
-  width: min(560px, calc(100vw - 2 * var(--gap)));
+  width: min(480px, calc(100vw - 2 * var(--gap)));
   background: var(--c-panel);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   z-index: 950;
-  padding: 12px 16px 14px;
+  padding: 9px 14px 11px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   font-family: "Lato", sans-serif;
 }
 
@@ -753,32 +760,97 @@ body.zoom-7 .marker-dot.district-center {
   display: none;
 }
 
+/* ── Timeline stub (collapsed re-open button, sits in #panel-stack) ─ */
+.timeline-stub {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--c-header);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.13);
+  padding: 9px 14px;
+  font-family: "Lato", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  gap: 8px;
+  transition: background 0.18s;
+}
+
+.timeline-stub:hover,
+.timeline-stub:focus-visible {
+  background: #2e2020;
+  outline: none;
+}
+
+.timeline-stub[hidden] {
+  display: none;
+}
+
+/* ── Timeline header ────────────────────────────────────── */
 .timeline-header {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
 
 .timeline-eyebrow {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--c-botev);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .timeline-date {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--c-text-muted);
+  white-space: nowrap;
 }
 
+/* ── Collapse button (−) inside panel header ─────────────── */
+.timeline-collapse-btn {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(110, 44, 145, 0.3);
+  border-radius: 50%;
+  color: var(--c-botev);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.timeline-collapse-btn:hover,
+.timeline-collapse-btn:focus-visible {
+  background: rgba(110, 44, 145, 0.1);
+  border-color: var(--c-botev);
+  outline: none;
+}
+
+/* ── Rest of timeline panel ─────────────────────────────── */
 .timeline-name {
-  font-family: "Playfair Display", serif;
-  font-size: 1.05rem;
+
+  font-size: 0.98rem;
   color: var(--c-header);
   font-weight: 600;
   line-height: 1.3;
@@ -800,7 +872,7 @@ body.zoom-7 .marker-dot.district-center {
 
 .timeline-controls {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .timeline-btn {
@@ -808,8 +880,8 @@ body.zoom-7 .marker-dot.district-center {
   background: var(--c-header);
   color: #fff;
   border: none;
-  padding: 8px 10px;
-  font-size: 0.74rem;
+  padding: 7px 8px;
+  font-size: 0.71rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -848,7 +920,8 @@ body.zoom-7 .marker-dot.district-center {
     width: auto;
     transform: none;
     bottom: var(--gap);
-    padding: 10px 12px 12px;
+    padding: 7px 10px 9px;
+    gap: 5px;
   }
 
   /* When the bottom-sheet sidebar is open, lift the timeline above it */
@@ -856,13 +929,23 @@ body.zoom-7 .marker-dot.district-center {
     bottom: calc(62% + var(--gap));
   }
 
+  .timeline-eyebrow {
+    font-size: 0.6rem;
+  }
+
   .timeline-name {
-    font-size: 0.95rem;
+    font-size: 0.88rem;
   }
 
   .timeline-btn {
-    font-size: 0.7rem;
-    padding: 7px 6px;
+    font-size: 0.67rem;
+    padding: 6px 5px;
+  }
+
+  .timeline-collapse-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 0.9rem;
   }
 }
 
