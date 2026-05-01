@@ -562,7 +562,12 @@
       updateTimelineUI();
     });
 
-    map.flyTo(ll, targetZoom, { duration: 1.0, easeLinearity: 0.4 });
+    /* setView animates directly to the target without the zoom-out/zoom-in
+       "fly" arc of flyTo. flyTo loads tiles at every intermediate zoom level
+       and then discards them, which causes the tile flicker. setView with
+       animate:true uses a single CSS transition to the destination zoom,
+       so tiles are only loaded once at the target zoom level. */
+    map.setView(ll, targetZoom, { animate: true, duration: 0.9, easeLinearity: 0.5 });
   }
 
   function updateActiveRouteProgress() {
