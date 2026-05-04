@@ -129,6 +129,21 @@
     </div>
     </div>
 
+    <!-- Participant search widget -->
+    <div id="chetnitsi-search" class="chetnitsi-search">
+      <div class="chetnitsi-search-row">
+        <svg class="chetnitsi-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="chetnitsi-search-input" class="chetnitsi-search-input"
+               placeholder="Търси четник…" autocomplete="off" spellcheck="false" />
+        <button id="chetnitsi-search-clear" class="chetnitsi-search-clear"
+                type="button" aria-label="Изчисти" hidden>✕</button>
+      </div>
+      <ul id="chetnitsi-search-list" class="chetnitsi-search-list" hidden role="listbox"></ul>
+    </div>
+
     <!-- Timeline stub — shown when timeline panel is manually collapsed -->
     <button id="timeline-stub" class="timeline-stub" hidden
       type="button" aria-label="Покажи хронологията">&#9654; Ботевата чета</button>

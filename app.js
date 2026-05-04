@@ -37,7 +37,8 @@
   var layerGroups = { points: null, detachments: null, districts: null, apostolic: null, okrazhenCenters: null, chetnitsi: null };
   var layerOn     = { points: true, detachments: true, districts: true, apostolic: true, okrazhenCenters: true, botev: true, chetnitsi: false };
 
-  var chetnitsiContent    = {};
+  var chetnitsiContent      = {};
+  var chetnitsiSearchIndex  = []; /* { name, years, placeId, placeName } */
   var chetnitsiUserDisabled = false; /* becomes true only if user explicitly unchecks */
 
   /* Botev timeline state */
@@ -78,8 +79,10 @@
       initTimelineControl();
       return loadChetnitsiData();
     }).then(function () {
+      buildChetnitsiSearchIndex();
       renderVisibleLayers();
       bindControls();
+      initChetnitsiSearch();
     });
   });
 
@@ -408,7 +411,131 @@
     return m;
   }
 
-  function openChetnitsiPanel(feature) {
+  function buildChetnitsiSearchIndex() {
+    chetnitsiSearchIndex = [];
+    Object.keys(chetnitsiContent).forEach(function (placeId) {
+      var entry     = chetnitsiContent[placeId];
+      var placeName = entry.title || placeId;
+      (entry.members || []).forEach(function (m) {
+        if (m.name) {
+          chetnitsiSearchIndex.push({
+            name:      m.name,
+            years:     m.years || '',
+            placeId:   placeId,
+            placeName: placeName
+          });
+        }
+      });
+    });
+    chetnitsiSearchIndex.sort(function (a, b) {
+      return a.name.localeCompare(b.name, 'bg');
+    });
+  }
+
+  function initChetnitsiSearch() {
+    var input = document.getElementById('chetnitsi-search-input');
+    var list  = document.getElementById('chetnitsi-search-list');
+    var clear = document.getElementById('chetnitsi-search-clear');
+    if (!input || !list || !clear) { return; }
+
+    function renderResults(q) {
+      q = q.trim();
+      list.innerHTML = '';
+      if (!q) {
+        list.hidden = true;
+        clear.hidden = true;
+        return;
+      }
+      clear.hidden = false;
+      var ql      = q.toLowerCase();
+      var matches = chetnitsiSearchIndex.filter(function (item) {
+        return item.name.toLowerCase().indexOf(ql) !== -1 ||
+               item.placeName.toLowerCase().indexOf(ql) !== -1;
+      }).slice(0, 10);
+
+      if (!matches.length) {
+        var noResult = document.createElement('li');
+        noResult.className = 'chetnitsi-search-no-results';
+        noResult.textContent = 'Няма резултати';
+        list.appendChild(noResult);
+      } else {
+        matches.forEach(function (item) {
+          var li = document.createElement('li');
+          li.className  = 'chetnitsi-search-item';
+          li.setAttribute('role', 'option');
+
+          var nameEl  = document.createElement('span');
+          nameEl.className   = 'chetnitsi-search-item-name';
+          nameEl.textContent = item.name;
+
+          var placeEl = document.createElement('span');
+          placeEl.className   = 'chetnitsi-search-item-place';
+          placeEl.textContent = item.placeName + (item.years ? ' · ' + item.years : '');
+
+          li.appendChild(nameEl);
+          li.appendChild(placeEl);
+          li.addEventListener('mousedown', function (e) {
+            /* mousedown fires before blur so we can act before input loses focus */
+            e.preventDefault();
+            input.value = item.name;
+            list.hidden = true;
+            selectSearchResult(item);
+          });
+          list.appendChild(li);
+        });
+      }
+      list.hidden = false;
+    }
+
+    input.addEventListener('input', function () { renderResults(input.value); });
+
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        list.hidden = true;
+        input.blur();
+      } else if (e.key === 'Enter') {
+        var first = list.querySelector('.chetnitsi-search-item');
+        if (first) { first.dispatchEvent(new MouseEvent('mousedown')); }
+      }
+    });
+
+    input.addEventListener('blur', function () {
+      /* Small delay so a click on a result fires first */
+      setTimeout(function () { list.hidden = true; }, 150);
+    });
+
+    clear.addEventListener('click', function () {
+      input.value = '';
+      list.hidden  = true;
+      clear.hidden = true;
+      input.focus();
+    });
+  }
+
+  function selectSearchResult(item) {
+    /* Enable chetnitsi layer if it was hidden */
+    if (!layerOn.chetnitsi) {
+      layerOn.chetnitsi     = true;
+      chetnitsiUserDisabled = false;
+      var cb = document.getElementById('toggle-chetnitsi');
+      if (cb) { cb.checked = true; }
+      renderVisibleLayers();
+    }
+    /* Find the feature in allFeatures.chetnitsi */
+    var feature = null;
+    for (var i = 0; i < allFeatures.chetnitsi.length; i++) {
+      if (allFeatures.chetnitsi[i].properties.popup_id === item.placeId) {
+        feature = allFeatures.chetnitsi[i];
+        break;
+      }
+    }
+    if (!feature) { return; }
+    var ll = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+    map.flyTo(ll, 9, { duration: 1.2, easeLinearity: 0.35 });
+    openChetnitsiPanel(feature, true);
+  }
+
+  function openChetnitsiPanel(feature, skipPan) {
     var entry = chetnitsiContent[feature.properties.popup_id];
     if (!entry) {
       entry = { title: feature.properties.name, summary: '', count: feature.properties.count || 0, members: [] };
@@ -421,7 +548,9 @@
     document.getElementById('sidebar').classList.add('is-open');
     document.body.classList.add('sidebar-open');
 
-    map.panTo(L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]));
+    if (!skipPan) {
+      map.panTo(L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]));
+    }
   }
 
   function renderChetnitsiContent(entry) {
