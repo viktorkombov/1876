@@ -49,8 +49,9 @@
     curveLayer:     null,  /* L.curve drawn via stroke-dashoffset                  */
     pointsLayer:    null,  /* layer group — markers added lazily                   */
     pointMarkers:   [],
-    revealedUpTo:   -1,
-    routeFractions: [],    /* [0..1] position of each point along route            */
+
+
+    revealedUpTo:   -1,    /* [0..1] position of each point along route            */
     _routeCumDist:  [],
     _routeTotalDist: 0,
     _svgPathLength:  0,    /* current SVG pixel path length                        */
@@ -616,9 +617,9 @@
                      '<div class="botev-lm-dot"></div>' +
                      '<div class="botev-lm-label">' + escapeHtml(f.properties.name) + '</div>' +
                      '</div>',
-        iconSize:    [34, 62],
-        iconAnchor:  [17, 57],
-        popupAnchor: [60, -57]
+        iconSize:    [24, 50],
+        iconAnchor:  [12, 47],
+        popupAnchor: [50, -47]
       });
       var m = L.marker(ll, { icon: icon, title: f.properties.name });
       m.on('click', function () { goToTimelineStep(idx); });
@@ -629,19 +630,19 @@
   }
 
   function showBotevLayers() {
-    if (botev.routeLayer  && !map.hasLayer(botev.routeLayer))  { botev.routeLayer.addTo(map); }
-    if (botev.curveLayer  && !map.hasLayer(botev.curveLayer))  {
+    if (botev.routeLayer   && !map.hasLayer(botev.routeLayer))   { botev.routeLayer.addTo(map); }
+    if (botev.curveLayer   && !map.hasLayer(botev.curveLayer))   {
       botev.curveLayer.addTo(map);
       initSvgLength();
     }
-    if (botev.pointsLayer && !map.hasLayer(botev.pointsLayer)) { botev.pointsLayer.addTo(map); }
+    if (botev.pointsLayer  && !map.hasLayer(botev.pointsLayer))  { botev.pointsLayer.addTo(map); }
   }
 
   function hideBotevLayers() {
     cancelAnimation();
-    if (botev.routeLayer  && map.hasLayer(botev.routeLayer))  { map.removeLayer(botev.routeLayer); }
-    if (botev.curveLayer  && map.hasLayer(botev.curveLayer))  { map.removeLayer(botev.curveLayer); }
-    if (botev.pointsLayer && map.hasLayer(botev.pointsLayer)) { map.removeLayer(botev.pointsLayer); }
+    if (botev.routeLayer   && map.hasLayer(botev.routeLayer))   { map.removeLayer(botev.routeLayer); }
+    if (botev.curveLayer   && map.hasLayer(botev.curveLayer))   { map.removeLayer(botev.curveLayer); }
+    if (botev.pointsLayer  && map.hasLayer(botev.pointsLayer))  { map.removeLayer(botev.pointsLayer); }
   }
 
   function setBotevVisible(on) {
@@ -671,6 +672,20 @@
     var panel = document.getElementById('timeline');
     if (!panel || !botev.points.length) { return; }
     panel.hidden = !layerOn.botev;
+
+    /* On tablet/mobile the sidebar bottom offset is driven by --timeline-h.
+       Measure the panel's actual rendered height and update the variable. */
+    function syncTimelineHeight() {
+      if (window.innerWidth <= 1200 && !panel.hidden) {
+        var h = panel.offsetHeight;
+        if (h > 0) {
+          document.documentElement.style.setProperty('--timeline-h', h + 'px');
+        }
+      }
+    }
+    /* Run after first paint and on resize */
+    requestAnimationFrame(function () { syncTimelineHeight(); });
+    window.addEventListener('resize', syncTimelineHeight);
 
     var slider = document.getElementById('timeline-slider');
     if (slider) {
@@ -769,6 +784,8 @@
     var stub  = document.getElementById('timeline-stub');
     if (panel) { panel.hidden = true; }
     if (stub)  { stub.hidden  = false; }
+    document.body.classList.add('timeline-collapsed');
+    document.documentElement.style.setProperty('--timeline-h', '0px');
   }
 
   function expandTimelinePanel() {
@@ -777,6 +794,13 @@
     var stub  = document.getElementById('timeline-stub');
     if (panel) { panel.hidden = false; }
     if (stub)  { stub.hidden  = true; }
+    document.body.classList.remove('timeline-collapsed');
+    requestAnimationFrame(function () {
+      if (window.innerWidth <= 1200 && panel && !panel.hidden) {
+        var h = panel.offsetHeight;
+        if (h > 0) { document.documentElement.style.setProperty('--timeline-h', h + 'px'); }
+      }
+    });
   }
 
   function goToTimelineStep(index) {
@@ -868,9 +892,9 @@
 
   function animateSegment(fromFraction, toFraction, duration, onComplete) {
     cancelAnimation();
-    var startTime   = null;
-    var panFrame    = 0;       /* counter to throttle pan checks to every 20 frames */
-    var panPending  = false;   /* avoid queuing multiple pans */
+    var startTime  = null;
+    var panFrame   = 0;
+    var panPending = false;
     function tick(ts) {
       if (!botev.playing) { return; }
       if (!startTime) { startTime = ts; }
@@ -881,24 +905,59 @@
       setRouteProgress(curFrac);
 
       /* Auto-pan: keep the drawn line tip visible.
-         Check every 20 frames (~330 ms at 60 fps) and only if not already panning. */
+         Check every 20 frames (~330 ms at 60 fps) and only if not already panning.
+         Desktop (>1200px): original simple lat/lng 15% margin logic.
+         Mobile (≤1200px): pixel-based check that accounts for timeline + sidebar
+                           blocking the bottom of the screen. */
       if (!panPending && ++panFrame % 20 === 0) {
         var tip = latlngAtFraction(curFrac);
         if (tip) {
-          var bounds  = map.getBounds();
-          var sw      = bounds.getSouthWest();
-          var ne      = bounds.getNorthEast();
-          var latSpan = ne.lat - sw.lat;
-          var lngSpan = ne.lng - sw.lng;
-          var margin  = 0.15;   /* 15 % of the viewport from each edge */
-          var inBounds =
-            tip.lat > sw.lat + latSpan * margin &&
-            tip.lat < ne.lat - latSpan * margin &&
-            tip.lng > sw.lng + lngSpan * margin &&
-            tip.lng < ne.lng - lngSpan * margin;
+          var vw = window.innerWidth;
+          var inBounds, panTarget;
+
+          if (vw > 1200) {
+            /* ── Desktop ── */
+            var bounds  = map.getBounds();
+            var sw      = bounds.getSouthWest();
+            var ne      = bounds.getNorthEast();
+            var latSpan = ne.lat - sw.lat;
+            var lngSpan = ne.lng - sw.lng;
+            var margin  = 0.15;
+            inBounds =
+              tip.lat > sw.lat + latSpan * margin &&
+              tip.lat < ne.lat - latSpan * margin &&
+              tip.lng > sw.lng + lngSpan * margin &&
+              tip.lng < ne.lng - lngSpan * margin;
+            panTarget = tip;
+          } else {
+            /* ── Mobile / tablet ── */
+            var vh = window.innerHeight;
+            var tl  = document.getElementById('timeline');
+            var blockedBottom = tl ? tl.offsetHeight : 0;
+            if (document.body.classList.contains('sidebar-open')) {
+              var sEl = document.querySelector('.sidebar');
+              if (sEl) { blockedBottom += sEl.offsetHeight; }
+            }
+            var px = map.latLngToContainerPoint(tip);
+            var mg = 60;
+            inBounds =
+              px.x > mg &&
+              px.x < vw - mg &&
+              px.y > mg &&
+              px.y < vh - blockedBottom - mg;
+            /* Pan so tip lands at centre of the visible area */
+            var visY  = (vh - blockedBottom) / 2;
+            var zoom  = map.getZoom();
+            var tProj = map.project(tip, zoom);
+            panTarget = map.unproject(
+              L.point(tProj.x, tProj.y - visY + vh / 2),
+              zoom
+            );
+          }
+
           if (!inBounds) {
             panPending = true;
-            map.panTo(tip, { animate: true, duration: 0.6, easeLinearity: 0.5 });
+            map.panTo(panTarget, { animate: true, duration: 0.6, easeLinearity: 0.5 });
             map.once('moveend', function () { panPending = false; });
           }
         }
@@ -922,6 +981,13 @@
     if (segIdx >= botev.points.length) {
       botev.playing = false;
       updateTimelineUI();
+      /* Remove lollipops — resting dots remain to mark the locations */
+      botev.pointMarkers.forEach(function (m) {
+        if (botev.pointsLayer && botev.pointsLayer.hasLayer(m)) {
+          botev.pointsLayer.removeLayer(m);
+        }
+      });
+      botev.revealedUpTo = -1;
       revealChetnitsiLayer();
       return;
     }
@@ -935,22 +1001,42 @@
     var duration = Math.min(3500, Math.max(1200, segFrac * 18000));
 
     animateSegment(fromFraction, toFraction, duration, function () {
-      if (!botev.playing) { return; }
-      /* Line reached this point — reveal the marker now */
-      botev.currentIndex = segIdx;
-      revealMarkersUpTo(segIdx);
-      var f     = botev.points[segIdx];
-      var entry = botev.content[f.properties.popup_id] || { title: f.properties.name, html: '' };
-      openInfoPanel(f, entry);
-      var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
-      map.panTo(ll, { animate: true, duration: 0.5 });
-      updateTimelineUI();
-      /* Brief pause so the user can see the popup, then continue */
-      botev._segTimer = setTimeout(function () {
-        botev._segTimer = null;
-        playFromIndex(segIdx + 1);
-      }, 900);
+      onSegmentComplete(segIdx);
     });
+  }
+
+  function onSegmentComplete(segIdx) {
+    if (!botev.playing) { return; }
+    botev.currentIndex = segIdx;
+    revealMarkersUpTo(segIdx);
+    var f     = botev.points[segIdx];
+    var entry = botev.content[f.properties.popup_id] || { title: f.properties.name, html: '' };
+    openInfoPanel(f, entry);
+    var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
+    /* On mobile account for bottom panels so the point doesn't land behind them */
+    var panTarget = ll;
+    if (window.innerWidth <= 1200) {
+      var vh = window.innerHeight;
+      var tl = document.getElementById('timeline');
+      var blockedBottom = tl ? tl.offsetHeight : 0;
+      if (document.body.classList.contains('sidebar-open')) {
+        var sEl = document.querySelector('.sidebar');
+        if (sEl) { blockedBottom += sEl.offsetHeight; }
+      }
+      var visY  = (vh - blockedBottom) / 2;
+      var zoom  = map.getZoom();
+      var lProj = map.project(ll, zoom);
+      panTarget = map.unproject(
+        L.point(lProj.x, lProj.y - visY + vh / 2),
+        zoom
+      );
+    }
+    map.panTo(panTarget, { animate: true, duration: 0.5 });
+    updateTimelineUI();
+    botev._segTimer = setTimeout(function () {
+      botev._segTimer = null;
+      playFromIndex(segIdx + 1);
+    }, 900);
   }
 
   function updateTimelineUI() {
@@ -1110,15 +1196,20 @@
     botev.currentIndex = -1;
     botev._segIdx      = -1;
 
-    /* Remove all revealed markers so they animate in fresh */
+    /* Close the info sidebar so the map is unobstructed when playback restarts */
+    closeInfoPanel();
     botev.pointMarkers.forEach(function (m) {
       if (botev.pointsLayer && botev.pointsLayer.hasLayer(m)) {
         botev.pointsLayer.removeLayer(m);
       }
+      var el = m.getElement();
+      if (el) {
+        var lm = el.querySelector('.botev-lm');
+        if (lm) { lm.classList.remove('is-active', 'no-anim'); }
+      }
     });
     botev.revealedUpTo = -1;
 
-    /* Hide chetnitsi layer and reset its state */
     layerOn.chetnitsi       = false;
     chetnitsiUserDisabled   = false; /* allow auto-reveal again after next full play */
     var cb = document.getElementById('toggle-chetnitsi');

@@ -476,18 +476,25 @@ body.zoom-7 .marker-dot.district-center {
   border: none;
 }
 
-/* ── Mobile — bottom sheet ───────────────────────────────── */
-@media (max-width: 680px) {
+/* ── Tablet/Mobile — bottom sheet sidebar ────────────────── */
+@media (max-width: 1200px) {
+  :root {
+    --timeline-h: 120px;   /* fallback; JS overrides dynamically */
+  }
+
+  /* Sidebar becomes a bottom sheet sitting directly above the timeline.
+     z-index 960 keeps it above the timeline panel (z-index 950) so the
+     timeline's own shadow never bleeds through the sidebar. */
   .sidebar {
     top: auto;
     left: 0;
-    bottom: 0;
+    bottom: var(--timeline-h);
     width: 100%;
-    max-height: 62%;
+    max-height: 55vh;
     height: auto;
     border-radius: var(--radius) var(--radius) 0 0;
-    /* hidden below screen */
-    transform: translateY(110%);
+    z-index: 960;
+    transform: translateY(100vh);
     transition: transform var(--transition);
   }
 
@@ -495,15 +502,10 @@ body.zoom-7 .marker-dot.district-center {
     transform: translateY(0);
   }
 
-  /* Controls stack stays top-right on mobile (same as default) */
-  #panel-stack {
-    top: var(--gap);
-    right: var(--gap);
-  }
-
-  /* Don't shift Leaflet controls on mobile (sidebar is bottom sheet) */
-  body.sidebar-open .leaflet-left {
-    transform: translateX(0);
+  /* Don't shift Leaflet controls — sidebar is a bottom sheet */
+  body.sidebar-open .leaflet-left,
+  body:not(.sidebar-open) .leaflet-left {
+    transform: translateX(0) !important;
   }
 
   .sidebar-title {
@@ -512,6 +514,18 @@ body.zoom-7 .marker-dot.district-center {
 
   .sidebar-content {
     font-size: 0.9rem;
+  }
+
+  #panel-stack {
+    top: var(--gap);
+    right: var(--gap);
+  }
+}
+
+/* ── Mobile only ──────────────────────────────────────── */
+@media (max-width: 800px) {
+  .sidebar {
+    max-height: 50vh;
   }
 }
 
@@ -732,7 +746,7 @@ body.chetnitsi-reveal .chetnitsi-marker {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 34px;
+  width: 24px;
   overflow: visible;
   animation: botevMarkerAppear 0.4s 0.05s both
              cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -745,14 +759,14 @@ body.chetnitsi-reveal .chetnitsi-marker {
 
 /* ── Numbered bubble (top, large circle) ── */
 .botev-lm-bubble {
-  width: 34px;
-  height: 34px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: var(--c-botev);
-  border: 2.5px solid #fff;
+  border: 2px solid #fff;
   box-shadow:
-    0 0 0 2px var(--c-botev),
-    0 2px 8px rgba(110, 44, 145, 0.35);
+    0 0 0 1.5px var(--c-botev),
+    0 2px 6px rgba(110, 44, 145, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -763,24 +777,24 @@ body.chetnitsi-reveal .chetnitsi-marker {
 }
 
 .botev-lm:hover .botev-lm-bubble {
-  transform: scale(1.12);
+  transform: scale(1.15);
   box-shadow:
-    0 0 0 2.5px var(--c-botev),
-    0 4px 14px rgba(110, 44, 145, 0.5);
+    0 0 0 2px var(--c-botev),
+    0 4px 12px rgba(110, 44, 145, 0.5);
 }
 
 .botev-lm.is-active .botev-lm-bubble {
   background: #fff;
   box-shadow:
-    0 0 0 3px var(--c-botev),
-    0 0 18px rgba(110, 44, 145, 0.5);
-  transform: scale(1.15);
+    0 0 0 2.5px var(--c-botev),
+    0 0 14px rgba(110, 44, 145, 0.5);
+  transform: scale(1.2);
 }
 
 /* ── Number inside bubble ── */
 .botev-lm-num {
   font-family: "Lato", sans-serif;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 700;
   color: #fff;
   line-height: 1;
@@ -796,8 +810,8 @@ body.chetnitsi-reveal .chetnitsi-marker {
 /* ── Dotted stem connecting bubble to dot ── */
 .botev-lm-stem {
   width: 0;
-  height: 20px;
-  border-left: 2.5px dashed rgba(110, 44, 145, 0.5);
+  height: 14px;
+  border-left: 2px dashed rgba(110, 44, 145, 0.5);
   flex-shrink: 0;
   transition: border-color 0.2s;
 }
@@ -827,8 +841,8 @@ body.chetnitsi-reveal .chetnitsi-marker {
 /* ── Text label floating to the right of the bubble ── */
 .botev-lm-label {
   position: absolute;
-  top: 7px;         /* vertical centre against 34 px bubble */
-  left: calc(34px + 7px);
+  top: 4px;
+  left: calc(24px + 6px);
   white-space: nowrap;
   max-width: 140px;
   overflow: hidden;
@@ -859,6 +873,9 @@ body.chetnitsi-reveal .chetnitsi-marker {
   border-color: var(--c-botev);
   opacity: 1;
 }
+
+/* ── Hide lollipops when timeline is collapsed ── */
+body.timeline-collapsed .botev-lm { display: none !important; }
 
 /* ── Timeline panel ──────────────────────────────────────── */
 .timeline-panel {
@@ -1035,34 +1052,25 @@ body.chetnitsi-reveal .chetnitsi-marker {
   pointer-events: none;
 }
 
-@media (max-width: 680px) {
+@media (max-width: 1200px) {
   .timeline-panel {
-    left: var(--gap);
-    right: var(--gap);
-    width: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
     transform: none;
-    bottom: var(--gap);
+    bottom: 0;
+    border-radius: 0;
     padding: 7px 10px 9px;
     gap: 5px;
+    box-shadow: none;   /* no shadow — full-width, flush at screen bottom */
   }
 
-  /* When the bottom-sheet sidebar is open, sit right above it */
-  body.sidebar-open .timeline-panel {
-    bottom: calc(62% + var(--gap));
-  }
-
-  /* When timeline is playing and popup is open, shrink the popup
-     so it doesn't cover the timeline panel sitting below it     */
-  body.timeline-playing.sidebar-open .sidebar {
-    max-height: 36%;
+  .timeline-name {
+    display: none;
   }
 
   .timeline-eyebrow {
     font-size: 0.6rem;
-  }
-
-  .timeline-name {
-    font-size: 0.88rem;
   }
 
   .timeline-btn {
