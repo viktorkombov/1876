@@ -715,55 +715,149 @@ body.chetnitsi-reveal .chetnitsi-marker {
 
 .botev-route-active {
   pointer-events: none;
-  filter: drop-shadow(0 0 4px rgba(110, 44, 145, 0.45));
+  /* Gentle glow only — no second shadow so it stays clean at any weight */
+  filter: drop-shadow(0 0 4px rgba(110, 44, 145, 0.55));
 }
 
-/* Timeline point markers */
-.marker-dot.timeline-point {
-  background: rgba(255, 255, 255, 0.55);
-  border: 1.5px solid rgba(110, 44, 145, 0.45);
-  box-shadow: none;
+/* ── Botev labeled markers — lollipop style ─────────────── */
+
+@keyframes botevMarkerAppear {
+  0%   { transform: scale(0) translateY(8px); opacity: 0; }
+  65%  { transform: scale(1.1) translateY(-2px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.botev-lm {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 34px;
+  overflow: visible;
+  animation: botevMarkerAppear 0.4s 0.05s both
+             cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.botev-lm.no-anim {
+  animation: none;
+}
+
+/* ── Numbered bubble (top, large circle) ── */
+.botev-lm-bubble {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--c-botev);
+  border: 2.5px solid #fff;
+  box-shadow:
+    0 0 0 2px var(--c-botev),
+    0 2px 8px rgba(110, 44, 145, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s, opacity 0.2s;
-  opacity: 0.6;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
-.marker-dot.timeline-point:hover {
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.9);
-  border-color: var(--c-botev);
-  transform: scale(1.2);
-}
-
-.marker-dot.timeline-point.is-active {
-  background: var(--c-botev);
-  border: 2px solid #fff;
+.botev-lm:hover .botev-lm-bubble {
+  transform: scale(1.12);
   box-shadow:
-    0 0 0 2px var(--c-botev),
-    0 0 10px rgba(110, 44, 145, 0.5);
-  transform: scale(1.35);
-  opacity: 1;
-  z-index: 1000;
+    0 0 0 2.5px var(--c-botev),
+    0 4px 14px rgba(110, 44, 145, 0.5);
 }
 
-.marker-dot.timeline-point.is-active:hover {
-  transform: scale(1.45);
+.botev-lm.is-active .botev-lm-bubble {
+  background: #fff;
+  box-shadow:
+    0 0 0 3px var(--c-botev),
+    0 0 18px rgba(110, 44, 145, 0.5);
+  transform: scale(1.15);
 }
 
-.timeline-numeral {
+/* ── Number inside bubble ── */
+.botev-lm-num {
   font-family: "Lato", sans-serif;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
+  color: #fff;
   line-height: 1;
-  color: var(--c-botev);
   pointer-events: none;
   user-select: none;
+  transition: color 0.2s;
 }
 
-.marker-dot.timeline-point.is-active .timeline-numeral {
+.botev-lm.is-active .botev-lm-num {
+  color: var(--c-botev);
+}
+
+/* ── Dotted stem connecting bubble to dot ── */
+.botev-lm-stem {
+  width: 0;
+  height: 20px;
+  border-left: 2.5px dashed rgba(110, 44, 145, 0.5);
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+
+.botev-lm.is-active .botev-lm-stem {
+  border-left-color: var(--c-botev);
+  border-left-style: solid;
+}
+
+/* ── Small dot at actual geo coordinate ── */
+.botev-lm-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c-botev);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-botev);
+  flex-shrink: 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.botev-lm.is-active .botev-lm-dot {
+  transform: scale(1.4);
+  box-shadow: 0 0 0 2px var(--c-botev), 0 0 8px rgba(110, 44, 145, 0.55);
+}
+
+/* ── Text label floating to the right of the bubble ── */
+.botev-lm-label {
+  position: absolute;
+  top: 7px;         /* vertical centre against 34 px bubble */
+  left: calc(34px + 7px);
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(110, 44, 145, 0.2);
+  color: var(--c-header);
+  font-family: "Lato", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 3px 8px;
+  border-radius: 3px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  opacity: 0.88;
+  z-index: 3;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, opacity 0.2s;
+}
+
+.botev-lm:hover .botev-lm-label {
+  opacity: 1;
+}
+
+.botev-lm.is-active .botev-lm-label {
+  background: var(--c-botev);
   color: #fff;
+  border-color: var(--c-botev);
+  opacity: 1;
 }
 
 /* ── Timeline panel ──────────────────────────────────────── */
@@ -952,9 +1046,15 @@ body.chetnitsi-reveal .chetnitsi-marker {
     gap: 5px;
   }
 
-  /* When the bottom-sheet sidebar is open, lift the timeline above it */
+  /* When the bottom-sheet sidebar is open, sit right above it */
   body.sidebar-open .timeline-panel {
     bottom: calc(62% + var(--gap));
+  }
+
+  /* When timeline is playing and popup is open, shrink the popup
+     so it doesn't cover the timeline panel sitting below it     */
+  body.timeline-playing.sidebar-open .sidebar {
+    max-height: 36%;
   }
 
   .timeline-eyebrow {

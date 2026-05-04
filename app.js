@@ -21,6 +21,7 @@
   var TILE_URL    = './src/tiles/{z}/{x}/{y}.png';
   var INIT_CENTER = [42.72, 25.1];
   var INIT_ZOOM   = 7;
+  var TIMELINE_ZOOM = 8;
 
   var MARKER_SIZE = {
     'district-center':    26,
@@ -41,19 +42,27 @@
 
   /* Botev timeline state */
   var botev = {
-    routeCoords:    [],     /* flattened [[lat,lng], ...]  */
-    points:         [],     /* sorted timeline features    */
+    routeCoords:    [],
+    points:         [],
     content:        {},
-    routeLayer:     null,   /* faint full route            */
-    activeLayer:    null,   /* highlighted progress        */
-    pointsLayer:    null,
+    routeLayer:     null,  /* faint background polyline (always visible)           */
+    curveLayer:     null,  /* L.curve drawn via stroke-dashoffset                  */
+    pointsLayer:    null,  /* layer group — markers added lazily                   */
     pointMarkers:   [],
+    revealedUpTo:   -1,
+    routeFractions: [],    /* [0..1] position of each point along route            */
+    _routeCumDist:  [],
+    _routeTotalDist: 0,
+    _svgPathLength:  0,    /* current SVG pixel path length                        */
+    _drawnFraction:  0,    /* fraction of route currently drawn (0–1)              */
+    _rafHandle:      null, /* cancelAnimationFrame id                              */
+    _segTimer:       null, /* setTimeout id (pause between segments)               */
+    _segTargetFrac:  0,    /* toFraction of the segment currently animating        */
+    _segIdx:         -1,   /* index of the segment currently animating             */
     currentIndex:   -1,
     playing:        false,
-    playTimer:      null,
-    playInterval:   2500,
     isAnimating:    false,
-    panelCollapsed: false   /* manually minimised by user  */
+    panelCollapsed: false
   };
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -479,6 +488,7 @@
         var lat = f.geometry.coordinates[1];
         f.__routeIndex = nearestRouteVertexIndex(lat, lng);
       });
+      buildRouteFractions();
     }).catch(function (err) {
       // fail soft; existing map keeps working
       console.warn('Botev timeline data failed to load', err);
@@ -516,55 +526,121 @@
     return best;
   }
 
-  function createBotevRouteLayer() {
-    if (!botev.routeCoords.length) { return; }
-    botev.routeLayer = L.polyline(botev.routeCoords, {
-      color:       '#6e2c91',
-      weight:      3,
-      opacity:     0.4,
-      dashArray:   '6 6',
-      interactive: false,
-      className:   'botev-route-bg'
-    });
-    botev.activeLayer = L.polyline([], {
-      color:       '#6e2c91',
-      weight:      5,
-      opacity:     0.95,
-      lineCap:     'round',
-      lineJoin:    'round',
-      interactive: false,
-      className:   'botev-route-active'
+  /* ── Build smooth Catmull-Rom cubic-bezier path for L.curve ─ */
+  function buildCurvePath(coords) {
+    /* Subsample so the SVG path stays reasonable in size */
+    var step = Math.max(1, Math.floor(coords.length / 160));
+    var pts  = [];
+    for (var i = 0; i < coords.length; i += step) { pts.push(coords[i]); }
+    if (pts[pts.length - 1] !== coords[coords.length - 1]) {
+      pts.push(coords[coords.length - 1]);
+    }
+    if (pts.length < 2) { return ['M', pts[0] || [0,0], 'L', pts[0] || [0,0]]; }
+    var path = ['M', pts[0]];
+    for (var j = 1; j < pts.length; j++) {
+      var p0 = pts[Math.max(0, j - 2)];
+      var p1 = pts[j - 1];
+      var p2 = pts[j];
+      var p3 = pts[Math.min(pts.length - 1, j + 1)];
+      /* Catmull-Rom → cubic bezier (tension 1/6) */
+      var cp1 = [ p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6 ];
+      var cp2 = [ p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6 ];
+      path.push('C', cp1, cp2, p2);
+    }
+    return path;
+  }
+
+  function buildRouteFractions() {
+    var coords = botev.routeCoords;
+    if (!coords.length) { return; }
+    var cum = [0];
+    for (var i = 1; i < coords.length; i++) {
+      var a = coords[i - 1], b = coords[i];
+      var dy = b[0] - a[0];
+      var dx = (b[1] - a[1]) * Math.cos(a[0] * Math.PI / 180);
+      cum.push(cum[i - 1] + Math.sqrt(dx * dx + dy * dy));
+    }
+    var total = cum[cum.length - 1] || 1;
+    botev._routeCumDist   = cum;
+    botev._routeTotalDist = total;
+    botev.routeFractions  = botev.points.map(function (f) {
+      var idx = Math.min(f.__routeIndex || 0, cum.length - 1);
+      return cum[idx] / total;
     });
   }
 
+  function createBotevRouteLayer() {
+    if (!botev.routeCoords.length) { return; }
+
+    /* Ghost: full route, always visible, very faint */
+    botev.routeLayer = L.polyline(botev.routeCoords, {
+      color:       '#9b59b6',
+      weight:      2,
+      opacity:     0.18,
+      dashArray:   '3 11',
+      interactive: false,
+      className:   'botev-route-bg'
+    });
+
+    /* Animated drawing line using L.curve + stroke-dashoffset */
+    botev.curveLayer = L.curve(buildCurvePath(botev.routeCoords), {
+      color:       '#6e2c91',
+      weight:      3.5,
+      opacity:     0.9,
+      dashArray:   '10 8',
+      lineCap:     'round',
+      lineJoin:    'round',
+      fill:        false,
+      interactive: false,
+      className:   'botev-route-active'
+    });
+
+    /* After any Leaflet redraw (pan/zoom) the SVG pixel lengths change;
+       patch _updatePath so we restore dasharray/dashoffset proportionally. */
+    var _orig = botev.curveLayer._updatePath.bind(botev.curveLayer);
+    botev.curveLayer._updatePath = function () {
+      _orig();
+      restoreSvgDashoffset();
+    };
+  }
+
   function createTimelinePointLayer() {
-    var size = 18;
-    var markers = botev.points.map(function (f, idx) {
-      var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
+    botev.pointMarkers = botev.points.map(function (f, idx) {
+      var ll  = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
+      var num = f.properties.order || (idx + 1);
       var icon = L.divIcon({
         className:   '',
-        html:        '<div class="marker-dot timeline-point" data-idx="' + idx + '" style="width:' + size + 'px;height:' + size + 'px;"><span class="timeline-numeral">' + (f.properties.order || (idx + 1)) + '</span></div>',
-        iconSize:    [size, size],
-        iconAnchor:  [size / 2, size / 2],
-        popupAnchor: [0, -(size / 2 + 4)]
+        html:        '<div class="botev-lm">' +
+                     '<div class="botev-lm-bubble"><span class="botev-lm-num">' + num + '</span></div>' +
+                     '<div class="botev-lm-stem"></div>' +
+                     '<div class="botev-lm-dot"></div>' +
+                     '<div class="botev-lm-label">' + escapeHtml(f.properties.name) + '</div>' +
+                     '</div>',
+        iconSize:    [34, 62],
+        iconAnchor:  [17, 57],
+        popupAnchor: [60, -57]
       });
       var m = L.marker(ll, { icon: icon, title: f.properties.name });
       m.on('click', function () { goToTimelineStep(idx); });
       return m;
     });
-    botev.pointMarkers = markers;
-    botev.pointsLayer  = L.layerGroup(markers);
+    /* Empty group — markers are added one-by-one as steps are reached */
+    botev.pointsLayer = L.layerGroup([]);
   }
 
   function showBotevLayers() {
     if (botev.routeLayer  && !map.hasLayer(botev.routeLayer))  { botev.routeLayer.addTo(map); }
-    if (botev.activeLayer && !map.hasLayer(botev.activeLayer)) { botev.activeLayer.addTo(map); }
+    if (botev.curveLayer  && !map.hasLayer(botev.curveLayer))  {
+      botev.curveLayer.addTo(map);
+      initSvgLength();
+    }
     if (botev.pointsLayer && !map.hasLayer(botev.pointsLayer)) { botev.pointsLayer.addTo(map); }
   }
 
   function hideBotevLayers() {
+    cancelAnimation();
     if (botev.routeLayer  && map.hasLayer(botev.routeLayer))  { map.removeLayer(botev.routeLayer); }
-    if (botev.activeLayer && map.hasLayer(botev.activeLayer)) { map.removeLayer(botev.activeLayer); }
+    if (botev.curveLayer  && map.hasLayer(botev.curveLayer))  { map.removeLayer(botev.curveLayer); }
     if (botev.pointsLayer && map.hasLayer(botev.pointsLayer)) { map.removeLayer(botev.pointsLayer); }
   }
 
@@ -603,6 +679,7 @@
       slider.value = '0';
       slider.addEventListener('change', function (e) {
         if (botev.isAnimating) { return; }
+        if (botev.playing) { pauseTimeline(); }
         var i = parseInt(e.target.value, 10);
         if (isNaN(i)) { i = 0; }
         goToTimelineStep(i);
@@ -613,6 +690,7 @@
     if (prev) {
       prev.addEventListener('click', function () {
         if (botev.isAnimating) { return; }
+        if (botev.playing) { pauseTimeline(); }
         var i = (botev.currentIndex < 0 ? 0 : botev.currentIndex - 1);
         if (i < 0) { i = 0; }
         goToTimelineStep(i);
@@ -623,6 +701,7 @@
     if (next) {
       next.addEventListener('click', function () {
         if (botev.isAnimating) { return; }
+        if (botev.playing) { pauseTimeline(); }
         var i = (botev.currentIndex < 0 ? 0 : botev.currentIndex + 1);
         if (i >= botev.points.length) { i = botev.points.length - 1; }
         goToTimelineStep(i);
@@ -636,9 +715,37 @@
         var isFinished = !botev.playing &&
           botev.currentIndex >= 0 &&
           botev.currentIndex >= botev.points.length - 1;
-        if (isFinished)      { restartTimeline(); }
-        else if (botev.playing) { pauseTimeline(); }
-        else                 { playTimeline(); }
+        var isPaused = !botev.playing && botev._segIdx >= 0 &&
+          botev.currentIndex < botev.points.length - 1;
+        if (isFinished) {
+          restartTimeline();
+        } else if (botev.playing) {
+          pauseTimeline();
+        } else if (isPaused) {
+          /* Resume from wherever the line stopped mid-draw */
+          botev.playing = true;
+          updateTimelineUI();
+          playFromIndex(botev._segIdx);
+        } else {
+          playTimeline();
+        }
+      });
+    }
+
+    var stop = document.getElementById('timeline-stop');
+    if (stop) {
+      stop.addEventListener('click', function () {
+        var isFinished = !botev.playing &&
+          botev.currentIndex >= 0 &&
+          botev.currentIndex >= botev.points.length - 1;
+        var isPaused = !botev.playing && botev._segIdx >= 0 &&
+          botev.currentIndex < botev.points.length - 1;
+        if (botev.playing) {
+          resetTimeline();
+        } else if (isPaused || isFinished) {
+          resetTimeline();
+          collapseTimelinePanel();
+        }
       });
     }
 
@@ -646,33 +753,44 @@
     var collapseBtn = document.getElementById('timeline-collapse');
     var stub        = document.getElementById('timeline-stub');
 
-    function collapsePanel() {
-      botev.panelCollapsed = true;
-      if (panel) { panel.hidden = true; }
-      if (stub)  { stub.hidden  = false; }
-    }
-
-    function expandPanel() {
-      botev.panelCollapsed = false;
-      if (panel) { panel.hidden = false; }
-      if (stub)  { stub.hidden  = true; }
-    }
-
     if (collapseBtn) {
-      collapseBtn.addEventListener('click', function () { collapsePanel(); });
+      collapseBtn.addEventListener('click', function () { collapseTimelinePanel(); });
     }
     if (stub) {
-      stub.addEventListener('click', function () { expandPanel(); });
+      stub.addEventListener('click', function () { expandTimelinePanel(); });
     }
 
     updateTimelineUI();
+  }
+
+  function collapseTimelinePanel() {
+    botev.panelCollapsed = true;
+    var panel = document.getElementById('timeline');
+    var stub  = document.getElementById('timeline-stub');
+    if (panel) { panel.hidden = true; }
+    if (stub)  { stub.hidden  = false; }
+  }
+
+  function expandTimelinePanel() {
+    botev.panelCollapsed = false;
+    var panel = document.getElementById('timeline');
+    var stub  = document.getElementById('timeline-stub');
+    if (panel) { panel.hidden = false; }
+    if (stub)  { stub.hidden  = true; }
   }
 
   function goToTimelineStep(index) {
     if (!botev.points.length) { return; }
     if (index < 0) { index = 0; }
     if (index >= botev.points.length) { index = botev.points.length - 1; }
+
+    cancelAnimation();
     botev.currentIndex = index;
+    botev._segIdx      = index;
+
+    /* Reveal all markers up to this step; the target one animates in. */
+    revealMarkersUpTo(index);
+    setRouteProgress(botev.routeFractions[index] || 0);
 
     var f  = botev.points[index];
     var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
@@ -680,34 +798,159 @@
     var entry = botev.content[f.properties.popup_id] || { title: f.properties.name, html: '' };
     openInfoPanel(f, entry);
 
-    updateActiveRouteProgress();
-
     /* Lock navigation for the duration of the fly animation */
     botev.isAnimating = true;
     updateTimelineUI();
-
-    var minZ = f.properties.min_zoom || 8;
-    var targetZoom = Math.max(map.getZoom(), minZ);
-    if (targetZoom > 9) { targetZoom = 9; }
 
     map.once('moveend', function () {
       botev.isAnimating = false;
       updateTimelineUI();
     });
 
-    /* setView animates directly to the target without the zoom-out/zoom-in
-       "fly" arc of flyTo. flyTo loads tiles at every intermediate zoom level
-       and then discards them, which causes the tile flicker. setView with
-       animate:true uses a single CSS transition to the destination zoom,
-       so tiles are only loaded once at the target zoom level. */
+    /* Point 5 (Козлодуй, index 4): fly smoothly to zoom 8 */
+    var minZ = f.properties.min_zoom || 8;
+    var targetZoom = Math.max(map.getZoom(), minZ);
+    if (targetZoom > 8) { targetZoom = 8; }
     map.setView(ll, targetZoom, { animate: true, duration: 0.9, easeLinearity: 0.5 });
   }
 
-  function updateActiveRouteProgress() {
-    if (!botev.activeLayer || botev.currentIndex < 0) { return; }
-    var idx = botev.points[botev.currentIndex].__routeIndex || 0;
-    var slice = botev.routeCoords.slice(0, idx + 1);
-    botev.activeLayer.setLatLngs(slice);
+  /* ── SVG stroke-dashoffset helpers ──────────────────────── */
+
+  function initSvgLength() {
+    if (!botev.curveLayer || !botev.curveLayer._path) { return; }
+    var el  = botev.curveLayer._path;
+    var len = el.getTotalLength() || 1;
+    botev._svgPathLength = len;
+    el.style.strokeDasharray  = len + ' ' + len;
+    el.style.strokeDashoffset = len * (1 - botev._drawnFraction);
+  }
+
+  function restoreSvgDashoffset() {
+    if (!botev.curveLayer || !botev.curveLayer._path) { return; }
+    var el  = botev.curveLayer._path;
+    var len = el.getTotalLength() || botev._svgPathLength || 1;
+    botev._svgPathLength      = len;
+    el.style.strokeDasharray  = len + ' ' + len;
+    el.style.strokeDashoffset = len * (1 - botev._drawnFraction);
+  }
+
+  function setRouteProgress(fraction) {
+    botev._drawnFraction = Math.max(0, Math.min(1, fraction));
+    if (!botev.curveLayer || !botev.curveLayer._path || !botev._svgPathLength) { return; }
+    botev.curveLayer._path.style.strokeDashoffset =
+      botev._svgPathLength * (1 - botev._drawnFraction);
+  }
+
+  function cancelAnimation() {
+    if (botev._rafHandle) { cancelAnimationFrame(botev._rafHandle); botev._rafHandle = null; }
+    if (botev._segTimer)  { clearTimeout(botev._segTimer);          botev._segTimer  = null; }
+  }
+
+  /* ── Core segment animation using rAF ───────────────────── */
+
+  /* Return the lat/lng on the route at a given fraction [0..1] */
+  function latlngAtFraction(frac) {
+    var cum    = botev._routeCumDist;
+    var coords = botev.routeCoords;
+    if (!cum.length || !coords.length) { return null; }
+    var target = frac * botev._routeTotalDist;
+    /* Binary search for the segment */
+    var lo = 0, hi = cum.length - 1;
+    while (lo < hi - 1) {
+      var mid = (lo + hi) >> 1;
+      if (cum[mid] <= target) { lo = mid; } else { hi = mid; }
+    }
+    var segLen = cum[hi] - cum[lo];
+    var t = segLen > 0 ? (target - cum[lo]) / segLen : 0;
+    var a = coords[lo], b = coords[hi];
+    return L.latLng(a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]));
+  }
+
+  function animateSegment(fromFraction, toFraction, duration, onComplete) {
+    cancelAnimation();
+    var startTime   = null;
+    var panFrame    = 0;       /* counter to throttle pan checks to every 20 frames */
+    var panPending  = false;   /* avoid queuing multiple pans */
+    function tick(ts) {
+      if (!botev.playing) { return; }
+      if (!startTime) { startTime = ts; }
+      var elapsed = ts - startTime;
+      var t = Math.min(elapsed / duration, 1);
+      t = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; /* ease-in-out quad */
+      var curFrac = fromFraction + t * (toFraction - fromFraction);
+      setRouteProgress(curFrac);
+
+      /* Auto-pan: keep the drawn line tip visible.
+         Check every 20 frames (~330 ms at 60 fps) and only if not already panning. */
+      if (!panPending && ++panFrame % 20 === 0) {
+        var tip = latlngAtFraction(curFrac);
+        if (tip) {
+          var bounds  = map.getBounds();
+          var sw      = bounds.getSouthWest();
+          var ne      = bounds.getNorthEast();
+          var latSpan = ne.lat - sw.lat;
+          var lngSpan = ne.lng - sw.lng;
+          var margin  = 0.15;   /* 15 % of the viewport from each edge */
+          var inBounds =
+            tip.lat > sw.lat + latSpan * margin &&
+            tip.lat < ne.lat - latSpan * margin &&
+            tip.lng > sw.lng + lngSpan * margin &&
+            tip.lng < ne.lng - lngSpan * margin;
+          if (!inBounds) {
+            panPending = true;
+            map.panTo(tip, { animate: true, duration: 0.6, easeLinearity: 0.5 });
+            map.once('moveend', function () { panPending = false; });
+          }
+        }
+      }
+
+      if (elapsed < duration) {
+        botev._rafHandle = requestAnimationFrame(tick);
+      } else {
+        botev._rafHandle = null;
+        setRouteProgress(toFraction);
+        if (onComplete) { onComplete(); }
+      }
+    }
+    botev._rafHandle = requestAnimationFrame(tick);
+  }
+
+  /* ── Chain through segments during auto-play ─────────────── */
+
+  function playFromIndex(segIdx) {
+    if (!botev.playing) { return; }
+    if (segIdx >= botev.points.length) {
+      botev.playing = false;
+      updateTimelineUI();
+      revealChetnitsiLayer();
+      return;
+    }
+    botev._segIdx         = segIdx;
+    var fromFraction      = botev._drawnFraction;        /* resume from current visual position */
+    var prevFrac          = segIdx === 0 ? 0 : (botev.routeFractions[segIdx - 1] || 0);
+    var toFraction        = botev.routeFractions[segIdx] || prevFrac;
+    botev._segTargetFrac  = toFraction;
+    /* Duration proportional to segment distance; capped at 3.5 s */
+    var segFrac  = Math.max(0.001, toFraction - prevFrac);
+    var duration = Math.min(3500, Math.max(1200, segFrac * 18000));
+
+    animateSegment(fromFraction, toFraction, duration, function () {
+      if (!botev.playing) { return; }
+      /* Line reached this point — reveal the marker now */
+      botev.currentIndex = segIdx;
+      revealMarkersUpTo(segIdx);
+      var f     = botev.points[segIdx];
+      var entry = botev.content[f.properties.popup_id] || { title: f.properties.name, html: '' };
+      openInfoPanel(f, entry);
+      var ll = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
+      map.panTo(ll, { animate: true, duration: 0.5 });
+      updateTimelineUI();
+      /* Brief pause so the user can see the popup, then continue */
+      botev._segTimer = setTimeout(function () {
+        botev._segTimer = null;
+        playFromIndex(segIdx + 1);
+      }, 900);
+    });
   }
 
   function updateTimelineUI() {
@@ -715,98 +958,185 @@
     var isFinished = !botev.playing &&
       botev.currentIndex >= 0 &&
       botev.currentIndex >= botev.points.length - 1;
+    /* Paused mid-animation: line is somewhere between two points */
+    var isPaused = !botev.playing && botev._segIdx >= 0 &&
+      botev.currentIndex < botev.points.length - 1;
 
-    var dateEl = document.getElementById('timeline-date');
-    var nameEl = document.getElementById('timeline-name');
-    var slider = document.getElementById('timeline-slider');
-    var play   = document.getElementById('timeline-play');
-
+    var dateEl  = document.getElementById('timeline-date');
+    var nameEl  = document.getElementById('timeline-name');
+    var slider  = document.getElementById('timeline-slider');
+    var play    = document.getElementById('timeline-play');
+    var stopBtn = document.getElementById('timeline-stop');
     var prevBtn = document.getElementById('timeline-prev');
     var nextBtn = document.getElementById('timeline-next');
+
+    /* While playing: only Stop and Pause/Play are usable */
+    var locked = botev.playing || botev.isAnimating;
 
     if (dateEl) { dateEl.textContent = f ? f.properties.date_label : ''; }
     if (nameEl) { nameEl.textContent = f ? f.properties.name : 'Походът на Ботевата чета'; }
     if (slider) {
       slider.value    = botev.currentIndex >= 0 ? String(botev.currentIndex) : '0';
-      slider.disabled = botev.isAnimating;
+      slider.disabled = locked;
     }
     if (play) {
-      if (isFinished)        { play.textContent = '↺ Отначало'; }
-      else if (botev.playing){ play.textContent = '❚❚ Пауза'; }
-      else                   { play.textContent = '▶ Пусни'; }
+      if (isFinished)         { play.textContent = '↺ Отначало'; }
+      else if (botev.playing) { play.textContent = '❚❚ Пауза'; }
+      else if (isPaused)      { play.textContent = '▶ Продължи'; }
+      else                    { play.textContent = '▶ Пусни'; }
+      play.disabled = botev.isAnimating && !botev.playing;
     }
+    if (stopBtn) {
+      var isActive = botev.playing || isPaused || isFinished;
+      stopBtn.textContent = isActive && !botev.playing ? '✖ Затвори' : '■ Спри';
+      stopBtn.disabled = !isActive;
+    }
+    if (prevBtn) { prevBtn.disabled = locked; }
+    if (nextBtn) { nextBtn.disabled = locked; }
 
-    /* Disable / enable Prev & Next during fly animation */
-    if (prevBtn) { prevBtn.disabled = botev.isAnimating; }
-    if (nextBtn) { nextBtn.disabled = botev.isAnimating; }
+    /* Lock map interaction while timeline is playing */
+    if (botev.playing) {
+      map.scrollWheelZoom.disable();
+      map.dragging.disable();
+      map.touchZoom.disable();
+      map.doubleClickZoom.disable();
+      document.body.classList.add('timeline-playing');
+    } else {
+      map.scrollWheelZoom.enable();
+      map.dragging.enable();
+      map.touchZoom.enable();
+      map.doubleClickZoom.enable();
+      document.body.classList.remove('timeline-playing');
+    }
 
     botev.pointMarkers.forEach(function (m, i) {
       var el = m.getElement();
       if (!el) { return; }
-      var dot = el.querySelector('.marker-dot');
-      if (!dot) { return; }
-      if (i === botev.currentIndex) { dot.classList.add('is-active'); }
-      else { dot.classList.remove('is-active'); }
+      var lm = el.querySelector('.botev-lm');
+      if (!lm) { return; }
+      if (i === botev.currentIndex) { lm.classList.add('is-active'); }
+      else { lm.classList.remove('is-active'); }
     });
   }
 
-  function playTimeline() {
-    if (!botev.points.length) { return; }
-    botev.playing = true;
-    if (botev.currentIndex < 0) { goToTimelineStep(0); }
-    if (botev.playTimer) { clearInterval(botev.playTimer); }
-    botev.playTimer = setInterval(function () {
-      var nxt = botev.currentIndex + 1;
-      if (nxt >= botev.points.length) {
-        pauseTimeline();
-        revealChetnitsiLayer();
-        return;
+  /* ── Reveal markers up to (and including) targetIdx ─────────
+     Markers before targetIdx appear without animation (instant);
+     the marker AT targetIdx gets the CSS appear animation because
+     it is freshly inserted into the DOM.                         */
+  function revealMarkersUpTo(targetIdx) {
+    if (!botev.pointsLayer) { return; }
+    /* Instantly reveal any skipped markers */
+    for (var j = botev.revealedUpTo + 1; j < targetIdx; j++) {
+      var mj = botev.pointMarkers[j];
+      if (mj && !botev.pointsLayer.hasLayer(mj)) {
+        /* Suppress animation for catch-up reveals */
+        mj.once('add', function () {
+          var el = this.getElement();
+          if (el) {
+            var lm = el.querySelector('.botev-lm');
+            if (lm) { lm.classList.add('no-anim'); }
+          }
+        });
+        botev.pointsLayer.addLayer(mj);
       }
-      goToTimelineStep(nxt);
-    }, botev.playInterval);
+    }
+    /* Reveal current marker with the appear animation */
+    var mc = botev.pointMarkers[targetIdx];
+    if (mc && !botev.pointsLayer.hasLayer(mc)) {
+      botev.pointsLayer.addLayer(mc);
+    }
+    botev.revealedUpTo = Math.max(botev.revealedUpTo, targetIdx);
+  }
+
+  function playTimeline() {
+    if (!botev.points.length || !botev.routeFractions.length) { return; }
+    var startAt = botev.currentIndex < 0 ? 0 : botev.currentIndex + 1;
+    if (startAt >= botev.points.length) {
+      botev.playing = false;
+      updateTimelineUI();
+      return;
+    }
+    botev.playing = true;
     updateTimelineUI();
+    /* When starting from the very beginning, fly to zoom 9 first
+       so the route draws at an intimate scale from the start.    */
+    if (startAt === 0 && map.getZoom() < 9) {
+      var f0 = botev.points[0];
+      var ll0 = L.latLng(f0.geometry.coordinates[1], f0.geometry.coordinates[0]);
+      map.flyTo(ll0, TIMELINE_ZOOM, { duration: 1.2, easeLinearity: 0.35 });
+      map.once('moveend', function () { playFromIndex(startAt); });
+    } else {
+      playFromIndex(startAt);
+    }
   }
 
   function pauseTimeline() {
     botev.playing = false;
-    if (botev.playTimer) { clearInterval(botev.playTimer); botev.playTimer = null; }
+    cancelAnimation();
     updateTimelineUI();
   }
 
   /* Auto-reveal the chetnitsi layer when the full route play finishes,
      unless the user has explicitly toggled it off. */
   function revealChetnitsiLayer() {
-    if (chetnitsiUserDisabled) { return; }  /* user opted out */
-    if (layerOn.chetnitsi)    { return; }  /* already visible */
+    /* Zoom out to overview first, then reveal chetnitsi and collapse panel */
+    map.flyTo(INIT_CENTER, INIT_ZOOM, { duration: 1.4, easeLinearity: 0.35 });
+    map.once('moveend', function () {
+      if (chetnitsiUserDisabled) { return; }
+      if (!layerOn.chetnitsi) {
+        layerOn.chetnitsi = true;
+        var cb = document.getElementById('toggle-chetnitsi');
+        if (cb) { cb.checked = true; }
 
-    layerOn.chetnitsi = true;
+        document.body.classList.add('chetnitsi-reveal');
+
+        if (layerGroups.chetnitsi && !map.hasLayer(layerGroups.chetnitsi)) {
+          layerGroups.chetnitsi.addTo(map);
+        } else if (!layerGroups.chetnitsi && allFeatures.chetnitsi.length) {
+          layerGroups.chetnitsi = createChetnitsiLayer(allFeatures.chetnitsi);
+          layerGroups.chetnitsi.addTo(map);
+        }
+
+        setTimeout(function () {
+          document.body.classList.remove('chetnitsi-reveal');
+        }, 900);
+      }
+    });
+  }
+
+  function resetTimeline() {
+    cancelAnimation();
+    botev.playing      = false;
+    botev.currentIndex = -1;
+    botev._segIdx      = -1;
+
+    /* Remove all revealed markers so they animate in fresh */
+    botev.pointMarkers.forEach(function (m) {
+      if (botev.pointsLayer && botev.pointsLayer.hasLayer(m)) {
+        botev.pointsLayer.removeLayer(m);
+      }
+    });
+    botev.revealedUpTo = -1;
+
+    /* Hide chetnitsi layer and reset its state */
+    layerOn.chetnitsi       = false;
+    chetnitsiUserDisabled   = false; /* allow auto-reveal again after next full play */
     var cb = document.getElementById('toggle-chetnitsi');
-    if (cb) { cb.checked = true; }
-
-    /* Add body class BEFORE adding layer so newly-created marker divs
-       inherit the animation while it's active */
-    document.body.classList.add('chetnitsi-reveal');
-
-    if (layerGroups.chetnitsi && !map.hasLayer(layerGroups.chetnitsi)) {
-      layerGroups.chetnitsi.addTo(map);
-    } else if (!layerGroups.chetnitsi && allFeatures.chetnitsi.length) {
-      layerGroups.chetnitsi = createChetnitsiLayer(allFeatures.chetnitsi);
-      layerGroups.chetnitsi.addTo(map);
+    if (cb) { cb.checked = false; }
+    if (layerGroups.chetnitsi && map.hasLayer(layerGroups.chetnitsi)) {
+      // TODO:isntead of removing the layer when closing timeline, we should hide only the timeline-related features and keep the layer with the rest of the chetnitsi features, so that when user opens timeline again, we can just show the layer without having to recreate it and re-add all features to it
+      // map.removeLayer(layerGroups.chetnitsi);
     }
 
-    /* Remove the reveal class after the longest marker animation finishes */
-    setTimeout(function () {
-      document.body.classList.remove('chetnitsi-reveal');
-    }, 900);
+    setRouteProgress(0);
+
+    updateTimelineUI();
   }
 
   function restartTimeline() {
-    if (botev.playTimer) { clearInterval(botev.playTimer); botev.playTimer = null; }
-    botev.playing      = false;
-    botev.currentIndex = -1;
-    if (botev.activeLayer) { botev.activeLayer.setLatLngs([]); }
-    updateTimelineUI();
-    playTimeline();
+    resetTimeline();
+    /* Wait for the fly to finish, then auto-play */
+    setTimeout(function () { playTimeline(); }, 1300);
   }
 
 })();
