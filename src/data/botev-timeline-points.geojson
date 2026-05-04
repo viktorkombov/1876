@@ -1,0 +1,188 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-gyurgevo",
+        "popup_id": "botev-gyurgevo",
+        "name": "Решението в Гюргево",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1875-10-01",
+        "date_label": "Есента 1875 – Пролет 1876",
+        "order": 1,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9667,
+          43.8833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-bucharest",
+        "popup_id": "botev-bucharest",
+        "name": "Сформиране на четата",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-04-10",
+        "date_label": "Април – Май 1876 г.",
+        "order": 2,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.1025,
+          44.4268
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-departure",
+        "popup_id": "botev-departure",
+        "name": "Потегляне от румънския бряг",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-16",
+        "date_label": "16 май 1876 г.",
+        "order": 3,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.96,
+          43.885
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-radetski",
+        "popup_id": "botev-radetski",
+        "name": "Овладяването на „Радецки“",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-17",
+        "date_label": "17 май 1876 г.",
+        "order": 4,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+24.76552745567257, 43.69721945748161
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-kozloduy",
+        "popup_id": "botev-kozloduy",
+        "name": "Дебаркиране при Козлодуй",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-17",
+        "date_label": "17 май 1876 г.",
+        "order": 5,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.6822,
+          43.7917
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-milin-kamak",
+        "popup_id": "botev-milin-kamak",
+        "name": "Сражението при Милин камък",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-18",
+        "date_label": "18 май 1876 г.",
+        "order": 6,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.6542,
+          43.3444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-balkan",
+        "popup_id": "botev-balkan",
+        "name": "Епопеята във Врачанския Балкан",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-20",
+        "date_label": "20 май (1 юни) 1876 г.",
+        "order": 7,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.5936,
+          43.1511
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "botev-rashov-dol",
+        "popup_id": "botev-rashov-dol",
+        "name": "Краят на похода",
+        "feature_type": "timeline_point",
+        "layer_group": "botev_timeline",
+        "style_group": "timeline-point",
+        "date": "1876-05-21",
+        "date_label": "След 20 май 1876 г.",
+        "order": 8,
+        "min_zoom": 7,
+        "max_zoom": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.6231,
+          43.1075
+        ]
+      }
+    }
+  ]
+}

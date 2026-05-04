@@ -188,15 +188,22 @@ body:not(.sidebar-open) .leaflet-left {
   color: var(--c-text-muted);
 }
 
-/* ── Controls panel ──────────────────────────────────────── */
-.controls-panel {
+/* ── Controls + timeline-stub wrapper ─────────────────────── */
+#panel-stack {
   position: absolute;
   top: var(--gap);
   right: var(--gap);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  z-index: 900;
+}
+
+/* ── Controls panel ──────────────────────────────────────────── */
+.controls-panel {
   background: var(--c-panel);
   border-radius: var(--radius);
   box-shadow: 0 2px 18px rgba(0, 0, 0, 0.13);
-  z-index: 900;
   min-width: 204px;
   overflow: hidden;
 }
@@ -469,18 +476,25 @@ body.zoom-7 .marker-dot.district-center {
   border: none;
 }
 
-/* ── Mobile — bottom sheet ───────────────────────────────── */
-@media (max-width: 680px) {
+/* ── Tablet/Mobile — bottom sheet sidebar ────────────────── */
+@media (max-width: 1200px) {
+  :root {
+    --timeline-h: 120px;   /* fallback; JS overrides dynamically */
+  }
+
+  /* Sidebar becomes a bottom sheet sitting directly above the timeline.
+     z-index 960 keeps it above the timeline panel (z-index 950) so the
+     timeline's own shadow never bleeds through the sidebar. */
   .sidebar {
     top: auto;
     left: 0;
-    bottom: 0;
+    bottom: var(--timeline-h);
     width: 100%;
-    max-height: 62%;
+    max-height: 55vh;
     height: auto;
     border-radius: var(--radius) var(--radius) 0 0;
-    /* hidden below screen */
-    transform: translateY(110%);
+    z-index: 960;
+    transform: translateY(100vh);
     transition: transform var(--transition);
   }
 
@@ -488,15 +502,10 @@ body.zoom-7 .marker-dot.district-center {
     transform: translateY(0);
   }
 
-  /* Controls move to bottom-right on mobile */
-  .controls-panel {
-    top: var(--gap);
-    right: var(--gap);
-  }
-
-  /* Don't shift Leaflet controls on mobile (sidebar is bottom sheet) */
-  body.sidebar-open .leaflet-left {
-    transform: translateX(0);
+  /* Don't shift Leaflet controls — sidebar is a bottom sheet */
+  body.sidebar-open .leaflet-left,
+  body:not(.sidebar-open) .leaflet-left {
+    transform: translateX(0) !important;
   }
 
   .sidebar-title {
@@ -506,4 +515,668 @@ body.zoom-7 .marker-dot.district-center {
   .sidebar-content {
     font-size: 0.9rem;
   }
+
+  #panel-stack {
+    top: var(--gap);
+    right: var(--gap);
+  }
 }
+
+/* ── Mobile only ──────────────────────────────────────── */
+@media (max-width: 800px) {
+  .sidebar {
+    max-height: 50vh;
+  }
+}
+
+/* ============================================================
+   BOTEV MARCH — route, timeline points, timeline panel
+   ============================================================ */
+
+:root {
+  --c-botev: #6e2c91;
+  --c-chetnitsi: #b87333;
+}
+
+/* ── Chetnitsi origin markers ────────────────────────────── */
+
+/* Reveal animation: plays on each marker when the layer is auto-shown
+   after the route animation finishes. Spring bounce scale-in. */
+@keyframes chetnitsiReveal {
+  0%   { transform: scale(0);    opacity: 0; }
+  65%  { transform: scale(1.18); opacity: 1; }
+  85%  { transform: scale(0.94); }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+body.chetnitsi-reveal .chetnitsi-marker {
+  animation: chetnitsiReveal 0.55s ease-out both;
+}
+
+/* Cluster split/merge: markers fly from the cluster center to their positions.
+   A smooth cubic-bezier gives the elastic "fly out" feel from the demo. */
+.leaflet-cluster-anim .leaflet-marker-icon,
+.leaflet-cluster-anim .leaflet-marker-shadow {
+  transition: transform 0.4s cubic-bezier(0.23, 1.0, 0.32, 1),
+              opacity   0.35s ease-in-out;
+}
+
+.chetnitsi-marker {
+  background: radial-gradient(circle at 30% 30%, #e09a52, var(--c-chetnitsi) 70%);
+  border: 2.5px solid #fff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px var(--c-chetnitsi),
+    0 2px 8px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.chetnitsi-marker:hover {
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 2px var(--c-chetnitsi),
+    0 4px 14px rgba(184, 115, 51, 0.6);
+}
+
+
+.chetnitsi-marker-count {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  /* font-size set inline per marker (proportional to size) */
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  user-select: none;
+}
+
+.toggle-swatch--chetnitsi {
+  background: var(--c-chetnitsi);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-chetnitsi);
+  width: 12px;
+  height: 12px;
+}
+
+.legend-icon--chetnitsi {
+  width: 12px;
+  height: 12px;
+  background: var(--c-chetnitsi);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-chetnitsi);
+  border-radius: 50%;
+}
+
+/* ── Chetnitsi sidebar content ───────────────────────────── */
+.chetnitsi-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chetnitsi-summary {
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: var(--c-text);
+  margin: 0;
+}
+
+.chetnitsi-count {
+  font-size: 0.85rem;
+  color: var(--c-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--c-divider);
+}
+
+.chetnitsi-count strong {
+  color: var(--c-chetnitsi);
+  font-size: 1rem;
+}
+
+.chetnitsi-members {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chetnitsi-member-card {
+  background: #faf7f1;
+  border-left: 3px solid var(--c-chetnitsi);
+  border-radius: 3px;
+  padding: 10px 12px;
+}
+
+.chetnitsi-member-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.chetnitsi-member-name {
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--c-header);
+  line-height: 1.25;
+}
+
+.chetnitsi-member-years {
+  font-size: 0.78rem;
+  color: var(--c-text-muted);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+.chetnitsi-member-role {
+  font-size: 0.8rem;
+  color: var(--c-chetnitsi);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  margin-bottom: 4px;
+}
+
+.chetnitsi-member-info {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--c-text);
+}
+
+@media (max-width: 680px) {
+  .chetnitsi-member-head {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+/* Toggle / legend swatches */
+.toggle-swatch--botev {
+  background: var(--c-botev);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-botev);
+  width: 12px;
+  height: 12px;
+}
+
+.legend-icon--botev {
+  width: 12px;
+  height: 12px;
+  background: var(--c-botev);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-botev);
+  border-radius: 50%;
+}
+
+/* Polyline rendering tweaks (color/opacity set via Leaflet options) */
+.botev-route-bg {
+  pointer-events: none;
+}
+
+.botev-route-active {
+  pointer-events: none;
+  /* Gentle glow only — no second shadow so it stays clean at any weight */
+  filter: drop-shadow(0 0 4px rgba(110, 44, 145, 0.55));
+}
+
+/* ── Botev labeled markers — lollipop style ─────────────── */
+
+@keyframes botevMarkerAppear {
+  0%   { transform: scale(0) translateY(8px); opacity: 0; }
+  65%  { transform: scale(1.1) translateY(-2px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.botev-lm {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 24px;
+  overflow: visible;
+  animation: botevMarkerAppear 0.4s 0.05s both
+             cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.botev-lm.no-anim {
+  animation: none;
+}
+
+/* ── Numbered bubble (top, large circle) ── */
+.botev-lm-bubble {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--c-botev);
+  border: 2px solid #fff;
+  box-shadow:
+    0 0 0 1.5px var(--c-botev),
+    0 2px 6px rgba(110, 44, 145, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.botev-lm:hover .botev-lm-bubble {
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 2px var(--c-botev),
+    0 4px 12px rgba(110, 44, 145, 0.5);
+}
+
+.botev-lm.is-active .botev-lm-bubble {
+  background: #fff;
+  box-shadow:
+    0 0 0 2.5px var(--c-botev),
+    0 0 14px rgba(110, 44, 145, 0.5);
+  transform: scale(1.2);
+}
+
+/* ── Number inside bubble ── */
+.botev-lm-num {
+  font-family: "Lato", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.botev-lm.is-active .botev-lm-num {
+  color: var(--c-botev);
+}
+
+/* ── Dotted stem connecting bubble to dot ── */
+.botev-lm-stem {
+  width: 0;
+  height: 14px;
+  border-left: 2px dashed rgba(110, 44, 145, 0.5);
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+
+.botev-lm.is-active .botev-lm-stem {
+  border-left-color: var(--c-botev);
+  border-left-style: solid;
+}
+
+/* ── Small dot at actual geo coordinate ── */
+.botev-lm-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c-botev);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--c-botev);
+  flex-shrink: 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.botev-lm.is-active .botev-lm-dot {
+  transform: scale(1.4);
+  box-shadow: 0 0 0 2px var(--c-botev), 0 0 8px rgba(110, 44, 145, 0.55);
+}
+
+/* ── Text label floating to the right of the bubble ── */
+.botev-lm-label {
+  position: absolute;
+  top: 4px;
+  left: calc(24px + 6px);
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(110, 44, 145, 0.2);
+  color: var(--c-header);
+  font-family: "Lato", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 3px 8px;
+  border-radius: 3px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  opacity: 0.88;
+  z-index: 3;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, opacity 0.2s;
+}
+
+.botev-lm:hover .botev-lm-label {
+  opacity: 1;
+}
+
+.botev-lm.is-active .botev-lm-label {
+  background: var(--c-botev);
+  color: #fff;
+  border-color: var(--c-botev);
+  opacity: 1;
+}
+
+/* ── Hide lollipops when timeline is collapsed ── */
+body.timeline-collapsed .botev-lm { display: none !important; }
+
+/* ── Chetnitsi participant search ────────────────────────── */
+.chetnitsi-search {
+  position: relative;
+  background: var(--c-panel);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.13);
+  min-width: 204px;
+}
+
+.chetnitsi-search-row {
+  display: flex;
+  align-items: center;
+  padding: 7px 10px;
+  gap: 6px;
+}
+
+.chetnitsi-search-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--c-text-muted);
+  flex-shrink: 0;
+}
+
+.chetnitsi-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.8rem;
+  color: var(--c-text);
+  min-width: 0;
+  font-family: inherit;
+}
+
+.chetnitsi-search-input::placeholder { color: var(--c-text-muted); }
+
+.chetnitsi-search-clear {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--c-text-muted);
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.chetnitsi-search-clear:hover { color: var(--c-text); }
+
+.chetnitsi-search-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--c-panel);
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16);
+  max-height: 260px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  z-index: 1100;
+}
+
+.chetnitsi-search-item {
+  padding: 7px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.chetnitsi-search-item:hover {
+  background: #f5f0eb;
+}
+
+.chetnitsi-search-item-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.chetnitsi-search-item-place {
+  font-size: 0.72rem;
+  color: var(--c-text-muted);
+}
+
+.chetnitsi-search-no-results {
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  color: var(--c-text-muted);
+  font-style: italic;
+}
+
+/* ── Timeline panel ──────────────────────────────────────── */
+.timeline-panel {
+  position: absolute;
+  bottom: var(--gap);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(480px, calc(100vw - 2 * var(--gap)));
+  background: var(--c-panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 950;
+  padding: 9px 14px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: "Lato", sans-serif;
+}
+
+.timeline-panel[hidden] {
+  display: none;
+}
+
+/* ── Timeline stub (collapsed re-open button, sits in #panel-stack) ─ */
+.timeline-stub {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--c-header);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.13);
+  padding: 9px 14px;
+  font-family: "Lato", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  gap: 8px;
+  transition: background 0.18s;
+}
+
+.timeline-stub:hover,
+.timeline-stub:focus-visible {
+  background: #2e2020;
+  outline: none;
+}
+
+.timeline-stub[hidden] {
+  display: none;
+}
+
+/* ── Timeline header ────────────────────────────────────── */
+.timeline-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeline-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-botev);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timeline-date {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--c-text-muted);
+  white-space: nowrap;
+}
+
+/* ── Collapse button (−) inside panel header ─────────────── */
+.timeline-collapse-btn {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(110, 44, 145, 0.3);
+  border-radius: 50%;
+  color: var(--c-botev);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.timeline-collapse-btn:hover,
+.timeline-collapse-btn:focus-visible {
+  background: rgba(110, 44, 145, 0.1);
+  border-color: var(--c-botev);
+  outline: none;
+}
+
+/* ── Rest of timeline panel ─────────────────────────────── */
+.timeline-name {
+
+  font-size: 0.98rem;
+  color: var(--c-header);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.timeline-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeline-progress input[type="range"] {
+  flex: 1;
+  width: 100%;
+  accent-color: var(--c-botev);
+  cursor: pointer;
+  height: 4px;
+}
+
+.timeline-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.timeline-btn {
+  flex: 1;
+  background: var(--c-header);
+  color: #fff;
+  border: none;
+  padding: 7px 8px;
+  font-size: 0.71rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.18s;
+  font-family: "Lato", sans-serif;
+}
+
+.timeline-btn:hover,
+.timeline-btn:focus-visible {
+  background: #2e2020;
+  outline: none;
+}
+
+.timeline-btn--play {
+  background: var(--c-botev);
+  flex: 1.2;
+}
+
+.timeline-btn--play:hover,
+.timeline-btn--play:focus-visible {
+  background: #5a2275;
+}
+
+.timeline-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@media (max-width: 1200px) {
+  .timeline-panel {
+    left: 0;
+    right: 0;
+    width: 100%;
+    transform: none;
+    bottom: 0;
+    border-radius: 0;
+    padding: 7px 10px 9px;
+    gap: 5px;
+    box-shadow: none;   /* no shadow — full-width, flush at screen bottom */
+  }
+
+  .timeline-name {
+    display: none;
+  }
+
+  .timeline-eyebrow {
+    font-size: 0.6rem;
+  }
+
+  .timeline-btn {
+    font-size: 0.67rem;
+    padding: 6px 5px;
+  }
+
+  .timeline-collapse-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 0.9rem;
+  }
+}
+
